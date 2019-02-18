@@ -1,0 +1,78 @@
+{
+	"common": {
+		"name": "virtualpowermeter",
+		"version": "0.0.1",
+		"news": {
+			"0.0.1": {
+				"en": "initial release",
+				"de": "Erstveröffentlichung",
+				"ru": "Начальная версия",
+				"pt": "lançamento inicial",
+				"nl": "Eerste uitgave",
+				"fr": "Première version",
+				"it": "Versione iniziale",
+				"es": "Versión inicial",
+				"pl": "Pierwsze wydanie",
+				"zh-cn": "首次出版"
+			}
+		},
+		"title": "Virtual Powermeter",
+		"titleLang": {
+			"en": "Virtual Powermeter",
+			"de": "Virtuelles Powermeter",
+			"ru": "Виртуальный Powermeter",
+			"pt": "Powermeter virtual",
+			"nl": "Virtual Powermeter",
+			"fr": "Powermeter virtuel",
+			"it": "Powermeter virtuale",
+			"es": "Medidor de potencia virtual",
+			"pl": "Wirtualny Powermeter",
+			"zh-cn": "虚拟功率计"
+		},
+		"desc": {
+			"en": "Erzeugt Virtuelle Strommesser",
+			"de": "Erzeugt Virtuelle Strommesser",
+			"ru": "Erzeugt Virtuelle Strommesser",
+			"pt": "Erzeugt Virtuelle Strommesser",
+			"nl": "Erzeugt Virtuelle Strommesser",
+			"fr": "Erzeugt Virtuelle Strommesser",
+			"it": "Erzeugt Virtuelle Strommesser",
+			"es": "Erzeugt Virtuelle Strommesser",
+			"pl": "Erzeugt Virtuelle Strommesser",
+			"zh-cn": "Erzeugt Virtuelle Strommesser"
+		},
+		"authors": [
+			"Lutz Sebastian <general.of.omega@googlemail.com>"
+		],
+		"keywords": [
+			"ioBroker",
+			"template",
+			"Smart Home",
+			"home automation"
+		],
+		"license": "MIT",
+		"platform": "Javascript/Node.js",
+		"main": "main.js",
+		"icon": "virtualpowermeter.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/Omega236/ioBroker.virtualpowermeter/master/admin/virtualpowermeter.png",
+		"readme": "https://github.com/Omega236/ioBroker.virtualpowermeter/blob/master/README.md",
+		"loglevel": "info",
+		"mode": "daemon",
+		"type": "energy",
+		"compact": true,
+		"materialize": true,
+		"supportCustoms": true,
+		"dependencies": [
+			{
+				"admin": ">=3.0.0"
+			}
+		]
+	},
+	"native": {
+		"option1": true,
+		"option2": "42"
+	},
+	"objects": [],
+	"instanceObjects": []
+}
