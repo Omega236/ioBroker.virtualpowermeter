@@ -17,18 +17,21 @@ Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/Omega23
 
 Erzeugt Virtuelle Strommesser
 
-Im Smarthome hat man viele Geräte die man zwar schalten kann, diese aber keinen integrierten Powermeter haben (meist Lichter).
+Im Smarthome hat man viele Gerï¿½te die man zwar schalten kann, diese aber keinen integrierten Powermeter haben (meist Lichter).
 
-Mit diesem Adapter ist das Ziel zu jedem eingestelltem Datenpunkt (über Custom -> MaxWatt (z.B. 60W)) zwei zusätzliche Datenpunkte zu befüllen -> Energy_Power (z.B. 60 W) und Energy_Total (z.B. 2501,23 Wh). Die Datenpunkte sollen noch in Gruppen zusammengefügt werden (z.B. Licht) und hier alle zusammen addiert werden.
+Mit diesem Adapter ist das Ziel zu jedem eingestelltem Datenpunkt (ï¿½ber Custom -> MaxWatt (z.B. 60W)) zwei zusï¿½tzliche Datenpunkte zu befï¿½llen -> Energy_Power (z.B. 60 W) und Energy_Total (z.B. 2501,23 Wh). Die Datenpunkte sollen noch in Gruppen zusammengefï¿½gt werden (z.B. Licht) und hier alle zusammen addiert werden.
 
-Mit diesen neuen Datenpunkten kann dann eine Einfache Visualiserung durchgeführt werden.
+Mit diesen neuen Datenpunkten kann dann eine Einfache Visualiserung durchgefï¿½hrt werden.
 
 siehe MeinBeispiel.jpg
 
-über Blockly hab ich es bereits realisiert. Mit Adapter spiele ich jetzt mal, habe keinerlei Erfahrung in JavaScript.
+ï¿½ber Blockly hab ich es bereits realisiert. Mit Adapter spiele ich jetzt mal, habe keinerlei Erfahrung in JavaScript.
 
 ## Changelog
 
+
+### 0.1.0
+* (Lutz Sebastian) Erste Version mit GrundfunktionalitÃ¤t
 ### 0.0.1
 * (Lutz Sebastian) initial release
 
