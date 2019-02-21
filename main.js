@@ -1,17 +1,18 @@
 "use strict";
-
 /*
  * Created with @iobroker/create-adapter v1.9.0
  */
-
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
+// Time Modules
+const cron = require("node-cron"); // Cron Schedulervar
+var listOfObjects = ["a"];
 
-// Load your modules here, e.g.:
-// const fs = require("fs");
 
-class Virtualpowermeter extends utils.Adapter {
+
+
+class   Virtualpowermeter extends utils.Adapter {
 
 	/**
 	 * @param {Partial<ioBroker.AdapterOptions>} [options={}]
@@ -19,7 +20,7 @@ class Virtualpowermeter extends utils.Adapter {
 	constructor(options) {
 		super({
 			...options,
-			name: "virtualpowermeter",
+			name: "virtualpowermeter"
 		});
 		this.on("ready", this.onReady);
 		this.on("objectChange", this.onObjectChange);
@@ -27,59 +28,183 @@ class Virtualpowermeter extends utils.Adapter {
 		// this.on("message", this.onMessage);
 		this.on("unload", this.onUnload);
 	}
-
+	
+	
 	/**
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	async onReady() {
-		// Initialize your adapter here
+		await this.initialObjects();
 
-		// The adapters config (in the instance object everything under the attribute "native") is accessible via
-		// this.config:
-		this.log.info("config option1: " + this.config.option1);
-		this.log.info("config option2: " + this.config.option2);
-
-		/*
-		For every state in the system there has to be also an object of type state
-		Here a simple template for a boolean variable named "testVariable"
-		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-		*/
-		await this.setObjectAsync("testVariable", {
-			type: "state",
-			common: {
-				name: "testVariable",
-				type: "boolean",
-				role: "indicator",
-				read: true,
-				write: true,
-			},
-			native: {},
+		// Minütlich Total rechnen
+		cron.schedule("* * * * *", async () => {
+			for (var key in listOfObjects) {
+				await this.Energy_Total_rechnenAsync(listOfObjects[ key]);
+			}
 		});
-
-		// in this template all states changes inside the adapters namespace are subscribed
-		this.subscribeStates("*");
-
-		/*
-		setState examples
-		you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-		*/
-		// the variable testVariable is set to true as command (ack=false)
-		await this.setStateAsync("testVariable", true);
-
-		// same thing, but the value is flagged "ack"
-		// ack should be always set to true if the value is received from or acknowledged from the target system
-		await this.setStateAsync("testVariable", { val: true, ack: true });
-
-		// same thing, but the state is deleted after 30s (getState will return null afterwards)
-		await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
-
-		// examples for the checkPassword/checkGroup functions
-		let result = await this.checkPasswordAsync("admin", "iobroker");
-		this.log.info("check user admin pw ioboker: " + result);
-
-		result = await this.checkGroupAsync("admin", "admin");
-		this.log.info("check group user admin group admin: " + result);
 	}
+
+	
+
+	/**
+	 *  hier werden für alle zu überwachenden Elemente: Datenpunkte erstellen, subscribe und Energy_Total_rechnenAsync
+	 */
+	async initialObjects()
+	{
+		//Alles unsubsciben so kann man diese funktion immer aufrufen
+		await this.unsubscribeStatesAsync("*");
+		listOfObjects = [];
+		// alle Objekte auslesen
+		var objects = await this.getForeignObjectsAsync("");
+	
+		
+		for (var key in objects) {
+			var iobrokerObject = objects[key];
+			//Überprüfen ob die CustomEinstellung Enabled und MaxPower gesetzt ist
+			if (iobrokerObject && iobrokerObject.common &&
+				(
+					(iobrokerObject.common.custom  && iobrokerObject.common.custom[this.namespace]  && iobrokerObject.common.custom[this.namespace].enabled && !isNaN( iobrokerObject.common.custom[this.namespace].maxpower))
+				)) 
+			{
+				this.log.info("Erstelle Datenpunkte und Überwache " + iobrokerObject._id);
+				await this.createVirtualPowerMeterObjectsAsync(iobrokerObject);	
+				await this.subscribeForeignStatesAsync(iobrokerObject._id);
+				await this.Energy_Total_rechnenAsync(iobrokerObject._id);
+				listOfObjects.push(iobrokerObject._id);
+				
+				
+			}	
+
+		
+		}	
+		
+	}
+
+
+	/**
+ 	* Berechnet anhand des zu überwachenden Object * maxpower die Aktuelle Leistung (Wenn max angegen ist wird value / max genommen)
+	* @param {string} id
+	 */
+	async Energy_Power_setzenAsync(id)	
+	{
+		//Das Objekt auslesn (wird für max power benötigt)
+		var idObject = await this.getForeignObjectAsync(id);
+		//Überprüfen ob Settings passen
+		if (idObject && idObject.common && idObject.common.custom && idObject.common.custom[this.namespace].maxpower){
+			//Den State auslesen (z.B. true/false oder 0%,20%,100%)
+			var objState = await this.getForeignStateAsync(id)
+			if (objState)
+			{
+				// den Multi berechnen (ist bei true/false bzw Dimmer unterschiedlich)
+				var Multi = objState.val * 1;
+				//wenn max wert gibt, dann kann dies verwendet werden
+				if (idObject.common.max)
+					Multi = Multi / idObject.common.max;
+				// wenn ein Dimmer kein Max wert hat, ist der Wert automatisch über 1, dann wird einfach durch 100 geteilt
+				if (Multi > 1)
+					Multi = Multi / 100;
+					
+				var newPower =  Multi * idObject.common.custom[this.namespace].maxpower;
+			
+				await this.setForeignStateAsync(this.getIdVirtualEnergyPower(id), { val: newPower, ack: true });
+			}
+			
+
+		}	
+		
+	}
+
+	/**
+ 	* Den Timestamp von Energy_Total auf jetzt setzen (für berechnung notwendig)
+	* @param {string} id
+ 	*/
+ 	async Energy_Total_updatetimestamp(id) {
+		await	this.setForeignStateAsync(this.getIdVirtualEnergyTotal(id),{ ts: new Date().getTime(), ack:true } );
+	}
+
+
+	/**
+ 	* berechnet anhand der vergangen Zeit und der Power die EnergyTotal
+	* @param {string} id
+ 	*/
+ 	async Energy_Total_rechnenAsync(id) {
+		//Die Aktuelle Power auslesen
+		var objEnergyPower = await this.getForeignStateAsync(this.getIdVirtualEnergyPower(id));
+		if (objEnergyPower)	{
+			var idobjEnergyTotal = this.getIdVirtualEnergyTotal(id);
+			//EnergyTotal auslesen, timestamp und aktueller wert wird benötigt
+			var objEnergyTotal = await this.getForeignStateAsync(idobjEnergyTotal);
+			if (objEnergyTotal)
+			{
+				//berechnen wieviel kwh dazukommen (alles auf 2 nachkomma runden)
+				var toAddEnergy_Total = Math.round(objEnergyPower.val * (((new Date().getTime()) - objEnergyTotal.ts) / 3600000) * 100) / 100;
+				if (toAddEnergy_Total > 0)
+				{
+					var newEnergy_Total = Math.round((objEnergyTotal.val + toAddEnergy_Total) * 100)/100;
+					//neuen wert setzen
+					await this.setForeignStateAsync(idobjEnergyTotal,{ val: newEnergy_Total, ack: true } );
+					this.log.info(idobjEnergyTotal + " auf " + newEnergy_Total + " gesetzt (added:" + toAddEnergy_Total + ")");
+				}
+			}
+		}
+	}
+
+	/**
+	 * Erstellt zu einem überwachendem Object die Datenpunkte Virtual_Energy_Power und Virtual_Energy_Total
+	 * @param {ioBroker.Object} iobrokerObject
+	 */
+	async createVirtualPowerMeterObjectsAsync(iobrokerObject)
+	{
+		await this.setForeignObjectNotExistsAsync(this.getIdVirtualEnergyPower(iobrokerObject._id), {
+				type: "state",
+				common: {
+					name: iobrokerObject.common.name	 + ".Virtual_Energy_Power",
+					role: "value.power.virtual",
+					type: "number",
+					desc: "Created by virtualpowermeter",
+					unit: "Watt",
+					read: true,
+					write: true,
+					def : 0
+				},
+				native: {},
+			});
+
+		await this.setForeignObjectNotExistsAsync(this.getIdVirtualEnergyTotal(iobrokerObject._id), {
+				type: "state",
+				common: {
+					name: iobrokerObject.common.name	 + ".Virtual_Energy_Total",
+					role: "value.power.consumption.virtual",
+					type: "number",
+					desc: "Created by virtualpowermeter",
+					unit: "Wh",
+					read: true,
+					write: true,
+					def : 0
+				},
+				native: {},
+			})
+
+	}
+
+	/**
+	 * Gibt die ID für Virtual_Energy_Power zurück
+	 * @param {string} id
+	 */
+	getIdVirtualEnergyPower(id)
+	{
+		return id.substr(0, id.lastIndexOf(".") + 1) + "Virtual_Energy_Power";
+	}
+
+	/**
+	 * gibt die id für Virtual_Energy_Total zurück
+	 * @param {string} id
+	 */
+	getIdVirtualEnergyTotal(id)
+	{
+		return id.substr(0, id.lastIndexOf(".") + 1) + "Virtual_Energy_Total";
+	}
+
 
 	/**
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
@@ -100,13 +225,7 @@ class Virtualpowermeter extends utils.Adapter {
 	 * @param {ioBroker.Object | null | undefined} obj
 	 */
 	onObjectChange(id, obj) {
-		if (obj) {
-			// The object was changed
-			this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
-		} else {
-			// The object was deleted
-			this.log.info(`object ${id} deleted`);
-		}
+		
 	}
 
 	/**
@@ -114,14 +233,15 @@ class Virtualpowermeter extends utils.Adapter {
 	 * @param {string} id
 	 * @param {ioBroker.State | null | undefined} state
 	 */
-	onStateChange(id, state) {
-		if (state) {
-			// The state was changed
-			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-		} else {
-			// The state was deleted
-			this.log.info(`state ${id} deleted`);
+	async onStateChange(id, state) {
+		if (state)
+		{
+			await this.Energy_Total_rechnenAsync(id);
+			await this.Energy_Power_setzenAsync(id);
+			await this.Energy_Total_updatetimestamp(id);
+			
 		}
+	
 	}
 
 	// /**
@@ -148,8 +268,8 @@ if (module.parent) {
 	/**
 	 * @param {Partial<ioBroker.AdapterOptions>} [options={}]
 	 */
-	module.exports = (options) => new Virtualpowermeter(options);
+	module.exports = (options) =>  new Virtualpowermeter(options);
 } else {
 	// otherwise start the instance directly
-	new Virtualpowermeter();
+ 	new Virtualpowermeter();
 }
