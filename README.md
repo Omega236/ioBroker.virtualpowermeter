@@ -29,7 +29,8 @@ siehe MeinBeispiel.jpg
 
 ## Changelog
 
-
+### 0.1.0
+* (Lutz Sebastian) Alle Funktionen implementiert, code noch nicht überprüft/optimiert/getestet
 ### 0.1.0
 * (Lutz Sebastian) Erste Version mit Grundfunktionalität
 ### 0.0.1

@@ -7,8 +7,10 @@
 const utils = require("@iobroker/adapter-core");
 // Time Modules
 const cron = require("node-cron"); // Cron Schedulervar
-var listOfObjects = ["a"];
-
+var idgroup = new Object();
+var idMulti = new Object();
+var groupTotalEnergyData = new Object();
+var groupTotalPowerData = new Object();
 
 
 
@@ -30,6 +32,7 @@ class   Virtualpowermeter extends utils.Adapter {
 	}
 	
 	
+	
 	/**
 	 * Is called when databases are connected and adapter received configuration.
 	 */
@@ -38,13 +41,71 @@ class   Virtualpowermeter extends utils.Adapter {
 
 		// Minütlich Total rechnen
 		cron.schedule("* * * * *", async () => {
-			for (var key in listOfObjects) {
-				await this.Energy_Total_rechnenAsync(listOfObjects[ key]);
+
+
+
+			for (var idobject in idMulti) {
+				await this.Energy_Total_rechnenAsync(idobject);
 			}
+			await this.GruppenGesamtEnergyTotalRechnen();
 		});
 	}
 
 	
+	async GruppeninfoAnpassen()
+	{
+
+		for (var group in groupTotalEnergyData)
+		{
+			var info = "";
+			// @ts-ignore
+			for (var id in groupTotalEnergyData[group])
+			{
+				// @ts-ignore
+				info += id + ";";
+
+			}
+			this.setStateAsync( this.getIdgroupInfo(group),{ val: info, ack: true } );
+		}
+
+	}
+
+
+	async GruppenGesamtEnergyTotalRechnen()
+	{
+		
+		for (var group in groupTotalEnergyData)
+		{
+			var gesamt = 0;
+			// @ts-ignore
+			for (var id in groupTotalEnergyData[group])
+			{
+				// @ts-ignore
+				gesamt += groupTotalEnergyData[group][id];
+
+			}
+			this.setStateAsync( this.getIdVirtualEnergyTotalgroup(group),{ val: Math.round( gesamt * 100) / 100, ack: true } );
+		}
+
+	}
+
+	async GruppenGesamtPowerTotalRechnen()
+	{
+		
+		for (var group in groupTotalPowerData)
+		{
+			var gesamt = 0;
+			// @ts-ignore
+			for (var id in groupTotalPowerData[group])
+			{
+				// @ts-ignore
+				gesamt += groupTotalPowerData[group][id];
+			}
+			this.setStateAsync( this.getIdVirtualEnergyPowergroup(group),{ val: Math.round(gesamt * 100) / 100, ack: true } );
+		}
+
+	}
+
 
 	/**
 	 *  hier werden für alle zu überwachenden Elemente: Datenpunkte erstellen, subscribe und Energy_Total_rechnenAsync
@@ -53,31 +114,71 @@ class   Virtualpowermeter extends utils.Adapter {
 	{
 		//Alles unsubsciben so kann man diese funktion immer aufrufen
 		await this.unsubscribeStatesAsync("*");
-		listOfObjects = [];
+		idMulti = new Object();
+		idgroup = new Object();
+		groupTotalEnergyData = new Object();
+		groupTotalPowerData = new Object();
 		// alle Objekte auslesen
 		var objects = await this.getForeignObjectsAsync("");
 	
 		
-		for (var key in objects) {
-			var iobrokerObject = objects[key];
+		for (var idobject in objects) {
+			var iobrokerObject = objects[idobject];
 			//Überprüfen ob die CustomEinstellung Enabled und MaxPower gesetzt ist
 			if (iobrokerObject && iobrokerObject.common &&
 				(
 					(iobrokerObject.common.custom  && iobrokerObject.common.custom[this.namespace]  && iobrokerObject.common.custom[this.namespace].enabled && !isNaN( iobrokerObject.common.custom[this.namespace].maxpower))
 				)) 
 			{
+				var group = "undefinied"
+				if (iobrokerObject.common.custom[this.namespace].group)
+				{
+					group = iobrokerObject.common.custom[this.namespace].group;
+				}
+				await this.createVirtualPowerMeterGroupsObjectsAsync(group);	
+
+				// @ts-ignore
+				idgroup[iobrokerObject._id] = group;
+				if (!(group in  groupTotalEnergyData))
+				{
+					// @ts-ignore
+					groupTotalEnergyData[group] = new Object();
+
+				}
+				// @ts-ignore
+				groupTotalEnergyData[group][iobrokerObject._id] = 0;
+
+				if (!(group in  groupTotalPowerData))
+				{
+					// @ts-ignore
+					groupTotalPowerData[group] = new Object();
+
+				}
+				// @ts-ignore
+				groupTotalPowerData[group][iobrokerObject._id] = 0;
+
+				var Multi = 1 * 1;
+				//wenn max wert gibt, dann kann dies verwendet werden
+				if (iobrokerObject.common.max)
+					Multi = Multi / iobrokerObject.common.max;
+				// @ts-ignore
+				idMulti[iobrokerObject._id] = Multi * iobrokerObject.common.custom[this.namespace].maxpower;
+
 				this.log.info("Erstelle Datenpunkte und Überwache " + iobrokerObject._id);
 				await this.createVirtualPowerMeterObjectsAsync(iobrokerObject);	
 				await this.subscribeForeignStatesAsync(iobrokerObject._id);
+				await this.Energy_Power_setzenAsync(iobrokerObject._id);	
 				await this.Energy_Total_rechnenAsync(iobrokerObject._id);
-				listOfObjects.push(iobrokerObject._id);
-				
+							
 				
 			}	
 
 		
-		}	
+		}
 		
+		await this.GruppenGesamtPowerTotalRechnen();	
+		await this.GruppenGesamtEnergyTotalRechnen();
+		await this.GruppeninfoAnpassen();
 	}
 
 
@@ -87,31 +188,19 @@ class   Virtualpowermeter extends utils.Adapter {
 	 */
 	async Energy_Power_setzenAsync(id)	
 	{
-		//Das Objekt auslesn (wird für max power benötigt)
-		var idObject = await this.getForeignObjectAsync(id);
-		//Überprüfen ob Settings passen
-		if (idObject && idObject.common && idObject.common.custom && idObject.common.custom[this.namespace].maxpower){
 			//Den State auslesen (z.B. true/false oder 0%,20%,100%)
 			var objState = await this.getForeignStateAsync(id)
 			if (objState)
 			{
-				// den Multi berechnen (ist bei true/false bzw Dimmer unterschiedlich)
-				var Multi = objState.val * 1;
-				//wenn max wert gibt, dann kann dies verwendet werden
-				if (idObject.common.max)
-					Multi = Multi / idObject.common.max;
-				// wenn ein Dimmer kein Max wert hat, ist der Wert automatisch über 1, dann wird einfach durch 100 geteilt
-				if (Multi > 1)
-					Multi = Multi / 100;
-					
-				var newPower =  Multi * idObject.common.custom[this.namespace].maxpower;
+							
+				// @ts-ignore
+				var Multi = idMulti[id]
+				var newPower =  objState.val *  Multi;
 			
 				await this.setForeignStateAsync(this.getIdVirtualEnergyPower(id), { val: newPower, ack: true });
+				// @ts-ignore
+				groupTotalPowerData[idgroup[id]][id] = newPower;
 			}
-			
-
-		}	
-		
 	}
 
 	/**
@@ -138,17 +227,70 @@ class   Virtualpowermeter extends utils.Adapter {
 			{
 				//berechnen wieviel kwh dazukommen (alles auf 2 nachkomma runden)
 				var toAddEnergy_Total = Math.round(objEnergyPower.val * (((new Date().getTime()) - objEnergyTotal.ts) / 3600000) * 100) / 100;
+				var newEnergy_Total = Math.round((objEnergyTotal.val + toAddEnergy_Total) * 100)/100;
 				if (toAddEnergy_Total > 0)
 				{
-					var newEnergy_Total = Math.round((objEnergyTotal.val + toAddEnergy_Total) * 100)/100;
 					//neuen wert setzen
 					await this.setForeignStateAsync(idobjEnergyTotal,{ val: newEnergy_Total, ack: true } );
 					this.log.info(idobjEnergyTotal + " auf " + newEnergy_Total + " gesetzt (added:" + toAddEnergy_Total + ")");
 				}
+				// @ts-ignore
+				groupTotalEnergyData[idgroup[id]][id] = newEnergy_Total;
 			}
 		}
 	}
 
+
+
+	/**
+	 * Erstellt zu einer Gruppe die nötigen Objekte
+	 * @param {string} group
+	 */
+	async createVirtualPowerMeterGroupsObjectsAsync(group)
+	{
+		await this.setObjectNotExists(this.getIdVirtualEnergyPowergroup(group), {
+				type: "state",
+				common: {
+					name: this.getIdVirtualEnergyPowergroup(group),
+					role: "value.power.virtual.group",
+					type: "number",
+					desc: "Created by virtualpowermeter",
+					unit: "Watt",
+					read: true,
+					write: true,
+					def : 0
+				},
+				native: {},
+			});
+
+		await this.setObjectNotExists(this.getIdVirtualEnergyTotalgroup(group), {
+				type: "state",
+				common: {
+					name: this.getIdVirtualEnergyTotalgroup(group),
+					role: "value.power.consumption.virtual.group",
+					type: "number",
+					desc: "Created by virtualpowermeter",
+					unit: "Wh",
+					read: true,
+					write: true,
+					def : 0
+				},
+				native: {},
+			});
+
+		await this.setObjectNotExists(this.getIdgroupInfo(group), {
+			type: "state",
+			common: {
+				name: this.getIdgroupInfo(group),
+				type: "string",
+				desc: "Created by virtualpowermeter",
+				read: true,
+				write: true,
+			},
+			native: {},
+		});
+
+	}
 	/**
 	 * Erstellt zu einem überwachendem Object die Datenpunkte Virtual_Energy_Power und Virtual_Energy_Total
 	 * @param {ioBroker.Object} iobrokerObject
@@ -197,6 +339,15 @@ class   Virtualpowermeter extends utils.Adapter {
 	}
 
 	/**
+	 * Gibt die ID für Virtual_Energy_Power zurück
+	 * @param {string} group
+	 */
+	getIdVirtualEnergyPowergroup(group)
+	{
+		return this.namespace + ".group_" + group + ".Virtual_Energy_Power_group_" + group;
+	}
+
+	/**
 	 * gibt die id für Virtual_Energy_Total zurück
 	 * @param {string} id
 	 */
@@ -204,6 +355,25 @@ class   Virtualpowermeter extends utils.Adapter {
 	{
 		return id.substr(0, id.lastIndexOf(".") + 1) + "Virtual_Energy_Total";
 	}
+
+		/**
+	 * Gibt die ID für Virtual_Energy_Power zurück
+	 * @param {string} group
+	 */
+	getIdVirtualEnergyTotalgroup(group)
+	{
+		return this.namespace + ".group_" + group + ".Virtual_Energy_Total_Gruppe_" + group;
+	}
+			/**
+	 * Gibt die ID für Virtual_Energy_Power zurück
+	 * @param {string} group
+	 */
+	getIdgroupInfo(group)
+	{
+		return this.namespace + ".group_" + group + ".info";
+	}
+
+
 
 
 	/**
@@ -224,8 +394,8 @@ class   Virtualpowermeter extends utils.Adapter {
 	 * @param {string} id
 	 * @param {ioBroker.Object | null | undefined} obj
 	 */
-	onObjectChange(id, obj) {
-		
+	async onObjectChange(id, obj) {
+		await this.initialObjects()
 	}
 
 	/**
@@ -239,7 +409,9 @@ class   Virtualpowermeter extends utils.Adapter {
 			await this.Energy_Total_rechnenAsync(id);
 			await this.Energy_Power_setzenAsync(id);
 			await this.Energy_Total_updatetimestamp(id);
-			
+			await this.GruppenGesamtPowerTotalRechnen();
+			await this.GruppenGesamtEnergyTotalRechnen();
+
 		}
 	
 	}
