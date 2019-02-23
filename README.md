@@ -29,6 +29,8 @@ siehe MeinBeispiel.jpg
 
 ## Changelog
 
+### 0.2.1
+* (Lutz Sebastian) CodeOptimierung und bild
 ### 0.2.0
 * (Lutz Sebastian) Alle Funktionen implementiert, code noch nicht überprüft/optimiert/getestet
 ### 0.1.0
