@@ -37,11 +37,12 @@ class   Virtualpowermeter extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	async onReady() {
+		this.subscribeForeignObjects("*");
 		await this.initialObjects();
 
 		// repeat evey minute the calculation of the totalEnergy
 		cron.schedule("* * * * *", async () => {
-			this.log.debug("cron started" );
+			this.log.debug("cron started");
 
 			for (var idobject in dic_Multi_id) {
 				await this.calc_TotalEnergy(idobject);
@@ -56,7 +57,11 @@ class   Virtualpowermeter extends utils.Adapter {
 	 * @param {ioBroker.Object | null | undefined} obj
 	 */
 	async onObjectChange(id, obj) {
-		await this.initialObjects()
+		var settingsforme = (obj && obj.common && obj.common.custom  && obj.common.custom[this.namespace])
+		var oldsettingsexist = (id in dic_Multi_id)
+
+		if (settingsforme || oldsettingsexist)
+			await this.initialObjects()
 	}
 
 	/**
@@ -180,7 +185,7 @@ class   Virtualpowermeter extends utils.Adapter {
 		//needed for groupCalculation
 		// @ts-ignore
 		dic_Power_group_id[dic_group_id[id]][id] = newPower;
-}
+	}
 
 	/**
  	* Den Timestamp von Energy_Total auf jetzt setzen (für berechnung notwendig)

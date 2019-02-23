@@ -1,9 +1,9 @@
 {
 	"common": {
 		"name": "virtualpowermeter",
-		"version": "0.2.1",
+		"version": "0.2.2",
 		"news": {
-			"0.2.1": {
+			"0.2.2": {
 				"en": "initial release",
 				"de": "Erstveröffentlichung",
 				"ru": "Начальная версия",
@@ -76,24 +76,7 @@
 	},
 	
 	"objects": [
-        {
-			"_id": "_design/custom",
-            "language": "javascript",
-            "views": {
-                "state": {
-                    "map": "function(doc) { if (doc.type === 'state' && (doc.common.custom || doc.common.history)) emit(doc._id, doc.common.custom || doc.common.history) }"
-                }
-            }
-		},
-		{
-			"_id": "_design/hm-rpc",
-            "language": "javascript",
-            "views": {
-                "state": {
-                    "map": "function(doc) { if (doc.type === 'state' && (doc.common.custom || doc.common.history)) emit(doc._id, doc.common.custom || doc.common.history) }"
-                }
-            }
-        }
+       
 	],
 	"instanceObjects": [ ]
 }

@@ -1,6 +1,6 @@
 {
   "name": "iobroker.virtualpowermeter",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Erzeugt Virtuelle Strommesser",
   "author": {
     "name": "Lutz Sebastian",
@@ -39,6 +39,12 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "eslint": "^5.14.1",
+    "eslint-config-google": "^0.12.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
     "gulp": "^4.0.0",
     "mocha": "^6.0.0",
     "proxyquire": "^2.1.0",

@@ -1,9 +1,9 @@
-{
+module.exports = {
     "env": {
         "es6": true,
         "node": true
     },
-    "extends": "google",
+    "extends": "standard",
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
@@ -14,4 +14,4 @@
     },
     "rules": {
     }
-}
+};
