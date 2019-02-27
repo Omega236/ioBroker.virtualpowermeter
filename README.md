@@ -31,7 +31,8 @@ siehe MeinBeispiel.jpg
 
 
 ## Changelog
-
+### 0.2.4
+* (Lutz Sebastian) var remove and SettingPage Info and dic in class and .bind(this) (Template 1.10)
 ### 0.2.3
 * (Lutz Sebastian) CodeOptimierung nach eslint
 ### 0.2.1
