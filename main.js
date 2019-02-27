@@ -18,6 +18,7 @@ class Virtualpowermeter extends utils.Adapter {
       ...options,
       name: 'virtualpowermeter',
     })
+    this.dicMultiId = {}
     this.on('ready', this.onReady.bind(this))
     this.on('objectChange', this.onObjectChange.bind(this))
     this.on('stateChange', this.onStateChange.bind(this))
@@ -155,11 +156,12 @@ class Virtualpowermeter extends utils.Adapter {
       newPower = Math.round(newPower * 100) / 100
 	  }
 	  this.log.debug(id + ' set ' + newPower)
-    await this.setForeignStateAsync(this.getIdPower(id), { val: newPower, ack: true })
-
     // needed for groupCalculation
     // @ts-ignore
     this.dicPowerGroupId[this.dicGroupId[id]][id] = newPower
+    await this.setForeignStateAsync(this.getIdPower(id), { val: newPower, ack: true })
+
+    
 	
   }
 
@@ -187,14 +189,15 @@ class Virtualpowermeter extends utils.Adapter {
         // berechnen wieviel kwh dazukommen (alles auf 2 nachkomma runden)
         let toAddEnergyTotal = Math.round(objEnergyPower.val * (((new Date().getTime()) - objEnergyTotal.ts) / 3600000) * 100) / 100
         let newEnergyTotal = Math.round((objEnergyTotal.val + toAddEnergyTotal) * 100) / 100
+        // needed for groupCalculation
+        // @ts-ignore
+        this.dicTotalEnergyGroupId[this.dicGroupId[id]][id] = newEnergyTotal
         if (toAddEnergyTotal > 0) {
           // neuen wert setzen
           this.log.debug(idobjEnergyTotal + ' set ' + newEnergyTotal + ' (added:' + toAddEnergyTotal + ')')
           await this.setForeignStateAsync(idobjEnergyTotal, { val: newEnergyTotal, ack: true })
         }
-        // needed for groupCalculation
-        // @ts-ignore
-        this.dicTotalEnergyGroupId[this.dicGroupId[id]][id] = newEnergyTotal
+        
       }
     }
   }
@@ -305,7 +308,7 @@ class Virtualpowermeter extends utils.Adapter {
         info += id + ';'
       }
       this.log.debug('setze ' + this.getIdGroupInfo(group) + ' auf : ' + info)
-      this.setStateAsync(this.getIdGroupInfo(group), { val: info, ack: true })
+      await this.setStateAsync(this.getIdGroupInfo(group), { val: info, ack: true })
     }
   }
 
@@ -322,7 +325,7 @@ class Virtualpowermeter extends utils.Adapter {
       }
       gesamt = Math.round(gesamt * 100) / 100
       this.log.debug('setze ' + this.getIdGroupTotalEnergy(group) + ' auf : ' + gesamt)
-      this.setStateAsync(this.getIdGroupTotalEnergy(group), { val: gesamt, ack: true })
+      await this.setStateAsync(this.getIdGroupTotalEnergy(group), { val: gesamt, ack: true })
     }
   }
 
@@ -331,14 +334,14 @@ class Virtualpowermeter extends utils.Adapter {
   */
   async calcGroupPower () {
     for (let group in this.dicPowerGroupId) {
-		let sum = 0
+		  let sum = 0
       // @ts-ignore
       for (let id in this.dicPowerGroupId[group]) {
         // @ts-ignore
         sum += this.dicPowerGroupId[group][id]
       }
       this.log.debug('setze ' + this.getIdGroupPower(group) + ' auf : ' + sum)
-      this.setStateAsync(this.getIdGroupPower(group), { val: Math.round(sum * 100) / 100, ack: true })
+      await this.setStateAsync(this.getIdGroupPower(group), { val: Math.round(sum * 100) / 100, ack: true })
     }
   }
 
