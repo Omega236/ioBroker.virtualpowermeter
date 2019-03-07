@@ -31,6 +31,10 @@ siehe MeinBeispiel.jpg
 
 
 ## Changelog
+
+ 
+### 0.2.7
+* (Lutz Sebastian) Bug found on travis unsubscribeStatesAsync
 ### 0.2.6
 * (Lutz Sebastian) texts adapted
 ### 0.2.5
