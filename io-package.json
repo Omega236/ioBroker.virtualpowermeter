@@ -1,45 +1,21 @@
 {
 	"common": {
 		"name": "virtualpowermeter",
-		"version": "0.2.5",
+		"version": "0.2.6",
 		"news": {
-			"0.2.5": {
-				"en": "initial release",
-				"de": "Erstveröffentlichung",
-				"ru": "Начальная версия",
-				"pt": "lançamento inicial",
-				"nl": "Eerste uitgave",
-				"fr": "Première version",
-				"it": "Versione iniziale",
-				"es": "Versión inicial",
-				"pl": "Pierwsze wydanie",
-				"zh-cn": "首次出版"
+			"0.2.6": {
+				"en": "Text angepasst",
+				"de": "Text adapted"
 			}
 		},
 		"title": "Virtual Powermeter",
 		"titleLang": {
 			"en": "Virtual Powermeter",
-			"de": "Virtuelles Powermeter",
-			"ru": "Виртуальный Powermeter",
-			"pt": "Powermeter virtual",
-			"nl": "Virtual Powermeter",
-			"fr": "Powermeter virtuel",
-			"it": "Powermeter virtuale",
-			"es": "Medidor de potencia virtual",
-			"pl": "Wirtualny Powermeter",
-			"zh-cn": "虚拟功率计"
+			"de": "Virtuelles Powermeter"
 		},
 		"desc": {
-			"en": "Erzeugt Virtuelle Strommesser",
-			"de": "Erzeugt Virtuelle Strommesser",
-			"ru": "Erzeugt Virtuelle Strommesser",
-			"pt": "Erzeugt Virtuelle Strommesser",
-			"nl": "Erzeugt Virtuelle Strommesser",
-			"fr": "Erzeugt Virtuelle Strommesser",
-			"it": "Erzeugt Virtuelle Strommesser",
-			"es": "Erzeugt Virtuelle Strommesser",
-			"pl": "Erzeugt Virtuelle Strommesser",
-			"zh-cn": "Erzeugt Virtuelle Strommesser"
+			"en": "Generates virtual electricity meters",
+			"de": "Erzeugt Virtuelle Stromzähler"
 		},
 		"authors": [
 			"Lutz Sebastian <general.of.omega@googlemail.com>"

@@ -8,7 +8,6 @@ const utils = require('@iobroker/adapter-core')
 // Time Modules
 const cron = require('node-cron') // Cron Schedulervar
 
-
 class Virtualpowermeter extends utils.Adapter {
   /**
   * @param {Partial<ioBroker.AdapterOptions>} [options={}]
@@ -16,7 +15,7 @@ class Virtualpowermeter extends utils.Adapter {
   constructor (options) {
     super({
       ...options,
-      name: 'virtualpowermeter',
+      name: 'virtualpowermeter'
     })
     this.dicMultiId = {}
     this.on('ready', this.onReady.bind(this))
@@ -24,15 +23,14 @@ class Virtualpowermeter extends utils.Adapter {
     this.on('stateChange', this.onStateChange.bind(this))
     // this.on("message", this.onMessage);
     this.on('unload', this.onUnload.bind(this))
-
   }
 
   /**
   * Is called when databases are connected and adapter received configuration.
   */
   async onReady () {
-      await this.initialObjects()
-      this.subscribeForeignObjects('*')
+    await this.initialObjects()
+    this.subscribeForeignObjects('*')
 
     // repeat evey minute the calculation of the totalEnergy
     cron.schedule('* * * * *', async () => {
@@ -89,7 +87,7 @@ class Virtualpowermeter extends utils.Adapter {
     // read out all Objects
     let objects = await this.getForeignObjectsAsync('')
     for (let idobject in objects) {
-		let iobrokerObject = objects[idobject]
+      let iobrokerObject = objects[idobject]
       // only do something when enabled and MaxPowerset
       if (iobrokerObject && iobrokerObject.common && iobrokerObject.common.custom && iobrokerObject.common.custom[this.namespace] && iobrokerObject.common.custom[this.namespace].enabled && iobrokerObject.common.custom[this.namespace].maxpower && !isNaN(iobrokerObject.common.custom[this.namespace].maxpower)) {
         this.log.info('initial (enabled and maxPower OK): ' + iobrokerObject._id)
@@ -152,17 +150,14 @@ class Virtualpowermeter extends utils.Adapter {
     if (objState) {
       // @ts-ignore
       let Multi = this.dicMultiId[id]
-      newPower = objState.val * Multi 
+      newPower = objState.val * Multi
       newPower = Math.round(newPower * 100) / 100
-	  }
-	  this.log.debug(id + ' set ' + newPower)
+    }
+    this.log.debug(id + ' set ' + newPower)
     // needed for groupCalculation
     // @ts-ignore
     this.dicPowerGroupId[this.dicGroupId[id]][id] = newPower
     await this.setForeignStateAsync(this.getIdPower(id), { val: newPower, ack: true })
-
-    
-	
   }
 
   /**
@@ -182,7 +177,7 @@ class Virtualpowermeter extends utils.Adapter {
     // Die Aktuelle Power auslesen
     let objEnergyPower = await this.getForeignStateAsync(this.getIdPower(id))
     if (objEnergyPower) {
-		let idobjEnergyTotal = this.getIdEnergyTotal(id)
+      let idobjEnergyTotal = this.getIdEnergyTotal(id)
       // EnergyTotal auslesen, timestamp und aktueller wert wird benötigt
       let objEnergyTotal = await this.getForeignStateAsync(idobjEnergyTotal)
       if (objEnergyTotal) {
@@ -197,7 +192,6 @@ class Virtualpowermeter extends utils.Adapter {
           this.log.debug(idobjEnergyTotal + ' set ' + newEnergyTotal + ' (added:' + toAddEnergyTotal + ')')
           await this.setForeignStateAsync(idobjEnergyTotal, { val: newEnergyTotal, ack: true })
         }
-        
       }
     }
   }
@@ -220,9 +214,7 @@ class Virtualpowermeter extends utils.Adapter {
         unit: 'Watt',
         read: true,
         write: true,
-		def: 0,
-		
-		
+        def: 0
       },
       native: {}
     })
@@ -302,7 +294,7 @@ class Virtualpowermeter extends utils.Adapter {
   */
   async setGroupInfo () {
     for (let group in this.dicTotalEnergyGroupId) {
-		let info = ''
+      let info = ''
       // @ts-ignore
       for (let id in this.dicTotalEnergyGroupId[group]) {
         info += id + ';'
@@ -317,7 +309,7 @@ class Virtualpowermeter extends utils.Adapter {
   */
   async calcGroupTotalEnergy () {
     for (let group in this.dicTotalEnergyGroupId) {
-		let gesamt = 0
+      let gesamt = 0
       // @ts-ignore
       for (let id in this.dicTotalEnergyGroupId[group]) {
         // @ts-ignore
@@ -334,7 +326,7 @@ class Virtualpowermeter extends utils.Adapter {
   */
   async calcGroupPower () {
     for (let group in this.dicPowerGroupId) {
-		  let sum = 0
+      let sum = 0
       // @ts-ignore
       for (let id in this.dicPowerGroupId[group]) {
         // @ts-ignore

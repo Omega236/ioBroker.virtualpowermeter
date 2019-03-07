@@ -1,7 +1,7 @@
 {
   "name": "iobroker.virtualpowermeter",
-  "version": "0.2.5",
-  "description": "Erzeugt Virtuelle Strommesser",
+  "version": "0.2.6",
+  "description": "Generates virtual electricity meters",
   "author": {
     "name": "Lutz Sebastian",
     "email": "general.of.omega@googlemail.com"

@@ -31,6 +31,8 @@ siehe MeinBeispiel.jpg
 
 
 ## Changelog
+### 0.2.6
+* (Lutz Sebastian) texts adapted
 ### 0.2.5
 * (Lutz Sebastian) awaits missing
 ### 0.2.4
