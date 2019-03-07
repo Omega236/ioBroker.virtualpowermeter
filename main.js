@@ -78,7 +78,7 @@ class Virtualpowermeter extends utils.Adapter {
     this.log.info('inital all Objects')
 
     // all unsubscripe to begin completly new
-    await this.unsubscribeStatesAsync('*')
+    this.unsubscribeForeignStates('*')
     // delete all dics
     this.dicMultiId = {}
     this.dicGroupId = {}
