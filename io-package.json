@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "virtualpowermeter",
-		"version": "0.2.8",
+		"version": "1.0.0",
 		"news": {
+      "1.0.0": {
+				"en": "Final Release",
+				"de": "Finale Version"
+      },
 			"0.2.8": {
 				"en": "Bug found on travis unsubscribeStatesAsync",
 				"de": "Bug found on travis unsubscribeStatesAsync"
