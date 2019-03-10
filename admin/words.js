@@ -29,5 +29,13 @@ systemDictionary = {
 	"Group name (calculated consumption of the whole group)": {
 		"en": "Group name (calculated consumption of the whole group)",
 		"de": "Gruppenname (errechnet Verbrauch der ganzen Gruppe)"
+  },
+  "Datapointname for Power": {
+		"en": "Datapointname for Power (Watt)",
+		"de": "Datenpunktname für Power (Watt)"
+  },
+  "Datapointname for Energy": {
+		"en": "Datapointname for Energy (Wh)",
+		"de": "Datenpunktname für Energy (Wh)"
 	}
 };

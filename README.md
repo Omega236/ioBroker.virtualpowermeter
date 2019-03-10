@@ -32,7 +32,8 @@ siehe MeinBeispiel.jpg
 
 ## Changelog
 
- 
+### 1.0.0
+* (Lutz Sebastian) Final Release
 ### 0.2.8
 * (Lutz Sebastian) Bug found on travis unsubscribeStatesAsync
 ### 0.2.6
