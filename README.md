@@ -3,7 +3,7 @@
 	ioBroker.virtualpowermeter
 </h1>
 
-[![NPM version](http://img.shields.io/npm/v/iobroker.virtualpowermeter.svg)](https://www.npmjs.com/package/iobroker.virtualpowermeter)
+![Number of Installations](http://iobroker.live/badges/virtualpowermeter-installed.svg) ![Number of Installations](http://iobroker.live/badges/virtualpowermeter-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.virtualpowermeter.svg)](https://www.npmjs.com/package/iobroker.virtualpowermeter)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.virtualpowermeter.svg)](https://www.npmjs.com/package/iobroker.virtualpowermeter)
 [![Dependency Status](https://img.shields.io/david/Omega236/iobroker.virtualpowermeter.svg)](https://david-dm.org/Omega236/iobroker.virtualpowermeter)
 [![Known Vulnerabilities](https://snyk.io/test/github/Omega236/ioBroker.virtualpowermeter/badge.svg)](https://snyk.io/test/github/Omega236/ioBroker.virtualpowermeter)
