@@ -32,7 +32,8 @@ siehe MeinBeispiel.jpg
 
 
 ## Changelog
-
+### 1.0.1
+* (Lutz Sebastian) SecurityUpdates
 ### 1.0.0
 * (Lutz Sebastian) Final Release
 ### 0.2.8
