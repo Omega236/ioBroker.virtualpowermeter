@@ -17,7 +17,7 @@ class Virtualpowermeter extends utils.Adapter {
       ...options,
       name: 'virtualpowermeter'
     })
-    this.dicMultiId = {}
+    this.dicMulti = {}
     this.on('ready', this.onReady.bind(this))
     this.on('objectChange', this.onObjectChange.bind(this))
     this.on('stateChange', this.onStateChange.bind(this))
@@ -36,7 +36,7 @@ class Virtualpowermeter extends utils.Adapter {
     cron.schedule('* * * * *', async () => {
       this.log.debug('cron started')
 
-      for (let idobject in this.dicMultiId) {
+      for (let idobject in this.dicMulti) {
         await this.calcTotalEnergy(idobject)
       }
       await this.calcGroupTotal()
@@ -50,7 +50,7 @@ class Virtualpowermeter extends utils.Adapter {
   */
   async onObjectChange (id, obj) {
     let settingsforme = (obj && obj.common && obj.common.custom && obj.common.custom[this.namespace])
-    let oldsettingsexist = (id in this.dicMultiId)
+    let oldsettingsexist = (id in this.dicMulti)
 
     if (settingsforme || oldsettingsexist) { await this.initialObjects() }
   }
@@ -61,7 +61,7 @@ class Virtualpowermeter extends utils.Adapter {
   * @param {ioBroker.State | null | undefined} state
   */
   async onStateChange (id, state) {
-    if (state && (id in this.dicMultiId)) {
+    if (state && (id in this.dicMulti)) {
       this.log.info(id + ' state changed')
       await this.calcTotalEnergy(id)
       await this.setPowerForId(id)
@@ -80,12 +80,14 @@ class Virtualpowermeter extends utils.Adapter {
     // all unsubscripe to begin completly new
     this.unsubscribeForeignStates('*')
     // delete all dics
-    this.dicMultiId = {}
+    this.dicMulti = {}
+    this.dicMaxpower = {}
     this.dicIdPower = {}
     this.dicIdTotal = {}
     this.dicGroupId = {}
     this.dicTotalGroupId = {}
     this.dicPowerGroupId = {}
+    this.dicInverted = {}
     // read out all Objects
     let objects = await this.getForeignObjectsAsync('')
     for (let idobject in objects) {
@@ -103,6 +105,12 @@ class Virtualpowermeter extends utils.Adapter {
           }
           await this.createObjectForGroup(group)
 
+          let inverted = false
+          if (iobrokerObject.common.custom[this.namespace].inverted) {
+            inverted = iobrokerObject.common.custom[this.namespace].inverted
+          }
+           // @ts-ignore
+          this.dicInverted[iobrokerObject._id] = inverted
           if (!iobrokerObject.common.custom[this.namespace].idEnergyPower) {
             iobrokerObject.common.custom[this.namespace].idEnergyPower = 'Virtual_Energy_Power'
             await this.extendForeignObjectAsync(iobrokerObject._id, iobrokerObject)
@@ -136,14 +144,14 @@ class Virtualpowermeter extends utils.Adapter {
           }
           // @ts-ignore
           this.dicPowerGroupId[group][iobrokerObject._id] = 0
-
+          // @ts-ignore
+          this.dicMaxpower[iobrokerObject._id] =  iobrokerObject.common.custom[this.namespace].maxpower
           // calculate the Muliplikator for the state (Dimmer 60W: Multi 0.6, State 60W: Multi 60)
           let Multi = 1
           // wenn max wert gibt, dann kann dies verwendet werden
           if (iobrokerObject.common.max) { Multi = Multi / iobrokerObject.common.max }
           // @ts-ignore
-          this.dicMultiId[iobrokerObject._id] = Multi * iobrokerObject.common.custom[this.namespace].maxpower
-
+          this.dicMulti[iobrokerObject._id] = Multi 
           await this.createObjectsForId(iobrokerObject)
           this.log.debug('subscribeForeignStates ' + iobrokerObject._id)
           await this.subscribeForeignStatesAsync(iobrokerObject._id)
@@ -169,8 +177,14 @@ class Virtualpowermeter extends utils.Adapter {
     let objState = await this.getForeignStateAsync(id)
     if (objState) {
       // @ts-ignore
-      let Multi = this.dicMultiId[id]
-      newPower = objState.val * Multi
+      let theValueAbsolut = objState.val * this.dicMulti[id]
+      // @ts-ignore
+      if (this.dicInverted[id])
+      {
+        theValueAbsolut = (theValueAbsolut - 1) * -1
+      }
+      // @ts-ignore
+      newPower = theValueAbsolut * this.dicMaxpower[id]
       newPower = Math.round(newPower * 100) / 100
     }
     this.log.debug(id + ' set ' + newPower)
