@@ -29,13 +29,22 @@ systemDictionary = {
 	"Group name (calculated consumption of the whole group)": {
 		"en": "Group name (calculated consumption of the whole group)",
 		"de": "Gruppenname (errechnet Verbrauch der ganzen Gruppe)"
-  },
-  "Datapointname for Power": {
+	},
+	"Datapointname for Power": {
 		"en": "Datapointname for Power (Watt)",
 		"de": "Datenpunktname für Power (Watt)"
-  },
-  "Datapointname for Energy": {
+	},
+	"Datapointname for Energy": {
 		"en": "Datapointname for Energy (Wh)",
 		"de": "Datenpunktname für Energy (Wh)"
-	}
+	},
+	"inverted": {
+		"en": "inverted",
+		"de": "Invertiert"
+	},
+	'use inverted value. if datapoint is "SwitchedOff" you can inverted so it Calculates the Power on false and not on true': {
+		"en": 'use inverted value. if datapoint is "SwitchedOff" you can inverted so it Calculates the Power on false and not on true',
+		"de": 'Arbeit invertiert. Wenn man einen Datenpunkt "IstAusgeschalten" hat kann man diesen invertieren, dadurch wird bei false die Power berechnet, bei true nicht'
+	}	
+   
 };
