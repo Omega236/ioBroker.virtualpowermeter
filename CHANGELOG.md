@@ -1,5 +1,7 @@
 
 # Changelog
+## 1.1.0 (2020-04-05)
+* (Lutz Sebastian) Inverted Added
 ## 1.0.1 (2019-10-01)
 * (Lutz Sebastian) SecurityUpdates
 ## 1.0.0
