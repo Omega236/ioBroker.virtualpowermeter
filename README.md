@@ -32,7 +32,9 @@ siehe MeinBeispiel.jpg
 
 
 ## Changelog
-## 1.1.0 (2020-04-05)
+### 1.1.1 (2020-04-07)
+* (Lutz Sebastian) bugfix translation
+### 1.1.0 (2020-04-05)
 * (Lutz Sebastian) inverted added
 ### 1.0.1
 * (Lutz Sebastian) SecurityUpdates
