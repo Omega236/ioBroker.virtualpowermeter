@@ -42,9 +42,8 @@ systemDictionary = {
 		"en": "inverted",
 		"de": "Invertiert"
 	},
-	'use inverted value. if datapoint is "SwitchedOff" you can inverted so it Calculates the Power on false and not on true': {
-		"en": 'use inverted value. if datapoint is "SwitchedOff" you can inverted so it Calculates the Power on false and not on true',
-		"de": 'Arbeitet invertiert. Wenn man einen Datenpunkt "IstAusgeschalten" hat kann man diesen invertieren, dadurch wird bei false die Power berechnet, bei true nicht'
-	}	
-   
+	"use inverted value. if datapoint is 'SwitchedOff' you can inverted so it Calculates the Power on false and not on true" : {
+		"en": "use inverted value. if datapoint is 'SwitchedOff' you can inverted so it Calculates the Power on false and not on true",
+		"de": "Arbeitet invertiert. Wenn man einen Datenpunkt 'IstAusgeschalten' hat kann man diesen invertieren, dadurch wird bei false die Power berechnet, bei true nicht"
+	}
 };
