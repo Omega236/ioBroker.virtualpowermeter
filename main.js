@@ -79,7 +79,7 @@ class Virtualpowermeter extends utils.Adapter {
     this.log.info('inital all Objects')
 
     // all unsubscripe to begin completly new
-    await this.unsubscribeForeignStatesAsync('*')
+    this.unsubscribeForeignStates('*')
     // delete all dics
     this.dicGroups = {}
     this.dicDatas = {}
@@ -316,7 +316,7 @@ class Virtualpowermeter extends utils.Adapter {
   async onUnload (callback) {
     try {
       this.log.info('cleaned everything up...')
-      await this.unsubscribeForeignStatesAsync('*')
+      this.unsubscribeForeignStates('*')
       this.unsubscribeForeignObjects('*')
       callback()
     } catch (e) {
