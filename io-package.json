@@ -1,9 +1,13 @@
 {
 	"common": {
 		"name": "virtualpowermeter",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "connectionType": "local",
 		"news": {
+      "1.2.1": {
+				"en": "translation",
+				"de": "translation"
+      },
       "1.2.0": {
 				"en": "js-controller 3.x support",
 				"de": "js-controller 3.x support"
