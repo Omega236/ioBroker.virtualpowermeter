@@ -32,6 +32,8 @@ siehe MeinBeispiel.jpg
 
 
 ## Changelog
+### 1.2.1 (2020-04-15)
+* (Lutz Sebastian) translation
 ### 1.2.0 (2020-04-15)
 * (Lutz Sebastian) js-controller 3.x support
 ### 1.1.1 (2020-04-07)
