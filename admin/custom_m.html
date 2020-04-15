@@ -6,18 +6,18 @@
 			<span class="translate">enabled</span>
 		</div>
 		<div class="col s2">
-			<input type="text" data-field="maxpower" size="30">
+			<input type="text" type="number" data-field="maxpower" size="30" data-default=50>
 			<span class="translate">Maximum consumption in watts when device is switched on or at 100%</span>
     		</div>
 		<div class="col s4">
-			<input type="text" data-field="group" size="30">
+			<input type="text" data-field="group" size="30" data-default="light">
 			<span class="translate">Group name (calculated consumption of the whole group)</span>
 		        
 		</div>
 		<div  class="col S4">
-			<input type="text" data-field="idEnergyPower" size="30">
+			<input type="text" data-field="idEnergyPower" size="30" data-default="Virtual_Energy_Power">
 			<span class="translate">Datapointname for Power</span>
-		      	<input type="text" data-field="idEnergyTotal" size="30">
+		      	<input type="text" data-field="idEnergyTotal" size="30" data-default="Virtual_Energy_Total">
       			<span class="translate">Datapointname for Energy</span>
 			<br />
 			<input type="checkbox" data-field="inverted" data-default="false"/>
@@ -35,21 +35,4 @@
 		translation = translation.substring(0, translation.lastIndexOf(';'));
 		$.extend(systemDictionary, JSON.parse(translation));
 	});
-
-	// There are two ways how to predefine default settings:
-	// - with attribute "data-default" (content independent)
-	// - with function in global variable "defaults". Function name is equal with adapter name.
-	//   as input function receives object with all information concerning it
-	if (typeof defaults !== 'undefined') {
-		defaults["virtualpowermeter"] = function (obj, instanceObj) {
-			return {
-				enabled:        false,
-				maxpower:       '60',
-				group:          'light',
-				idEnergyPower:  'Virtual_Energy_Power',
-				idEnergyTotal:  'Virtual_Energy_Total',
-				inverted: 	false
-			};
-		}
-	}
 </script>
