@@ -64,8 +64,8 @@ class Virtualpowermeter extends utils.Adapter {
   async onStateChange (id, state) {
     if (state && this.initialfinished) {
       this.log.info(id + ' state changed')
-      await this.setPower(this.dicDatas[id])
       await this.setEnergy(this.dicDatas[id])
+      await this.setPower(this.dicDatas[id])
       await this.setGroupPower(this.dicDatas[id].group)
       await this.setGroupEnergy(this.dicDatas[id].group)
     }
@@ -105,8 +105,8 @@ class Virtualpowermeter extends utils.Adapter {
           await this.createObjectsForId(oS)
           this.log.debug('subscribeForeignStates ' + oS.id)
           await this.subscribeForeignStatesAsync(oS.id)
-          await this.setPower(oS)
           await this.setEnergy(oS)
+          await this.setPower(oS)
           this.log.debug('initial done ' + iobrokerObject._id)
         }
       }
@@ -143,20 +143,20 @@ class Virtualpowermeter extends utils.Adapter {
   * @param {ObjectSettings} oS
   */
   async setEnergy (oS) {
+    let oldEnergy = 0
+    let oldts = new Date().getTime()
     // EnergyTotal auslesen, timestamp und aktueller wert wird benötigt
-    let objEnergyTotal = await this.getForeignStateAsync(oS.idEnergy)
-    if (objEnergyTotal) {
-      // Wenn Datenpunkt noch keinen Wert hat auf 0 setzen
-      if (!objEnergyTotal.val) {
-        objEnergyTotal.val = 0
-      }
-      // berechnen wieviel wh dazukommen (alles auf 2 nachkomma runden)
-      let toAddEnergyTotal = Math.round(oS.currentPower * (new Date().getTime() - objEnergyTotal.ts) / 3600000 * 100) / 100
-      oS.currentEnergy = Math.round((objEnergyTotal.val + toAddEnergyTotal) * 100) / 100
-      // neuen wert setzen
-      this.log.debug(oS.idEnergy + ' set ' + oS.currentEnergy + ' (added:' + toAddEnergyTotal + ')')
-      await this.setForeignStateAsync(oS.idEnergy, { val: oS.currentEnergy, ts: new Date().getTime(), ack: true })
+    let objidEnergy = await this.getForeignStateAsync(oS.idEnergy)
+    if (objidEnergy) {
+      oldEnergy = objidEnergy.val
+      oldts = objidEnergy.ts
     }
+    // berechnen wieviel wh dazukommen (alles auf 2 nachkomma runden)
+    let toAddEnergyTotal = Math.round(oS.currentPower * (new Date().getTime() - oldts) / 3600000 * 100) / 100
+    oS.currentEnergy = Math.round((oldEnergy + toAddEnergyTotal) * 100) / 100
+    // neuen wert setzen
+    this.log.debug(oS.idEnergy + ' set ' + oS.currentEnergy + ' (added:' + toAddEnergyTotal + ')')
+    await this.setForeignStateAsync(oS.idEnergy, { val: oS.currentEnergy, ack: true })
   }
 
   /**
@@ -197,14 +197,6 @@ class Virtualpowermeter extends utils.Adapter {
       },
       native: {}
     })
-    await this.createObjectForGroup(oS)
-  }
-
-  /**
-  * create Datapoints needed for group
-  * @param {ObjectSettings} oS
-  */
-  async createObjectForGroup (oS) {
     this.log.debug('create Datapoints for group ' + oS.group + ' if not exists')
 
     this.log.debug('create ' + oS.idGroupPower + ' if not exists')
@@ -263,7 +255,7 @@ class Virtualpowermeter extends utils.Adapter {
       let idGroupInfo
       for (let id in this.dicGroups[group]) {
         info += id + ';'
-        idGroupInfo = this.dicDatas[id].IdEnergyTotal
+        idGroupInfo = this.dicDatas[id].idGroupInfo
       }
       this.log.debug('setze ' + idGroupInfo + ' auf : ' + info)
       await this.setStateAsync(idGroupInfo, { val: info, ack: true })
@@ -286,8 +278,8 @@ class Virtualpowermeter extends utils.Adapter {
     let gesamt = 0
     let idGroupEnergy
     for (let id in this.dicGroups[group]) {
-      gesamt += this.dicDatas[id].CurrentEnergy
-      idGroupEnergy = this.dicDatas[id].IdEnergyTotal
+      gesamt += this.dicDatas[id].currentEnergy
+      idGroupEnergy = this.dicDatas[id].idGroupEnergy
     }
     gesamt = Math.round(gesamt * 100) / 100
     this.log.debug('setze ' + idGroupEnergy + ' auf : ' + gesamt)
@@ -310,8 +302,8 @@ class Virtualpowermeter extends utils.Adapter {
     let sum = 0
     let idGroupPower
     for (let id in this.dicGroups[group]) {
-      sum += this.dicDatas[id].CurrentPower
-      idGroupPower = this.dicDatas[id].IdGroupPower
+      sum += this.dicDatas[id].currentPower
+      idGroupPower = this.dicDatas[id].idGroupPower
     }
     this.log.debug('setze ' + idGroupPower + ' auf : ' + sum)
     await this.setStateAsync(idGroupPower, { val: Math.round(sum * 100) / 100, ack: true })

@@ -16,8 +16,8 @@ class ObjectSettings {
     this.idGroupPower = namespace + '.group_' + this.group + '.Virtual_Energy_Power_group_' + this.group
     this.idGroupInfo = namespace + '.group_' + this.group + '.info'
     this.idGroupEnergy = namespace + '.group_' + this.group + '.Virtual_Energy_Total_group_' + this.group
-    this.currentPower = undefined
-    this.currentEnergy = undefined
+    this.currentPower = 0
+    this.currentEnergy = 0
     let idParent = this.id.substr(0, this.id.lastIndexOf('.') + 1)
     if (iobrokerObject.common.custom[namespace].idEnergyPower.includes('.')) {
       this.idPower = iobrokerObject.common.custom[namespace].idEnergyPower

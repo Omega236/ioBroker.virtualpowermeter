@@ -65,7 +65,7 @@
     "url": "https://github.com/Omega236/ioBroker.virtualpowermeter/issues"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.0.0"
   },
   "readmeFilename": "README.md"
 }
