@@ -1,93 +1,89 @@
 {
-	"common": {
-		"name": "virtualpowermeter",
+  "common": {
+    "name": "virtualpowermeter",
     "version": "1.2.2",
     "connectionType": "local",
-		"news": {
+    "news": {
       "1.2.2": {
-				"en": "Group Calculations only after InitialFinished",
-				"de": "Group Calculations only after InitialFinished"
+        "en": "Group Calculations only after InitialFinished",
+        "de": "Group Calculations only after InitialFinished"
       },
       "1.2.1": {
-				"en": "translation",
-				"de": "translation"
+        "en": "translation",
+        "de": "translation"
       },
       "1.2.0": {
-				"en": "js-controller 3.x support",
-				"de": "js-controller 3.x support"
+        "en": "js-controller 3.x support",
+        "de": "js-controller 3.x support"
       },
       "1.1.1": {
-				"en": "bugfix translation",
-				"de": "bugfix translation"
+        "en": "bugfix translation",
+        "de": "bugfix translation"
       },
       "1.1.0": {
-				"en": "Inverted added",
-				"de": "Inverted added"
+        "en": "Inverted added",
+        "de": "Inverted added"
       },
       "1.0.1": {
-				"en": "Security Updates",
-				"de": "Security Updates"
+        "en": "Security Updates",
+        "de": "Security Updates"
       },
       "1.0.0": {
-				"en": "Final Release",
-				"de": "Finale Version"
+        "en": "Final Release",
+        "de": "Finale Version"
       },
-			"0.2.8": {
-				"en": "Bug found on travis unsubscribeStatesAsync",
-				"de": "Bug found on travis unsubscribeStatesAsync"
+      "0.2.8": {
+        "en": "Bug found on travis unsubscribeStatesAsync",
+        "de": "Bug found on travis unsubscribeStatesAsync"
       },
       "0.2.6": {
-				"en": "Text angepasst",
-				"de": "Text adapted"
-			}
-		},
-		"title": "Virtual Powermeter",
-		"titleLang": {
-			"en": "Virtual Powermeter",
-			"de": "Virtuelles Powermeter"
-		},
-		"desc": {
-			"en": "Generates virtual electricity meters",
-			"de": "Erzeugt Virtuelle Stromzähler"
-		},
-		"authors": [
-			"Lutz Sebastian <general.of.omega@googlemail.com>"
-		],
-		"keywords": [
-			"ioBroker",
-			"template",
-			"Smart Home",
-			"home automation"
-		],
-		"license": "MIT",
-		"platform": "Javascript/Node.js",
-		"main": "main.js",
-		"icon": "virtualpowermeter.png",
-		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/Omega236/ioBroker.virtualpowermeter/master/admin/virtualpowermeter.png",
-		"readme": "https://github.com/Omega236/ioBroker.virtualpowermeter/blob/master/README.md",
-		"loglevel": "info",
-		"mode": "daemon",
-		"type": "energy",
-		"compact": true,
-		"supportCustoms": true,
-		"materialize": true,
-		"preserveSettings": "custom",
-		"dependencies": [
-			{
-				"admin": ">=3.0.0"
-			}
-		]
-	},
-	"native": {
-		"option1": true,
-		"option2": "42"
-	},
-	
-	"objects": [
-      
-           
-
-	],
-	"instanceObjects": [ ]
+        "en": "Text angepasst",
+        "de": "Text adapted"
+      }
+    },
+    "title": "Virtual Powermeter",
+    "titleLang": {
+      "en": "Virtual Powermeter",
+      "de": "Virtuelles Powermeter"
+    },
+    "desc": {
+      "en": "Generates virtual electricity meters",
+      "de": "Erzeugt Virtuelle Stromzähler"
+    },
+    "authors": [
+      "Lutz Sebastian <general.of.omega@googlemail.com>"
+    ],
+    "keywords": [
+      "ioBroker",
+      "template",
+      "Smart Home",
+      "home automation"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "virtualpowermeter.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/Omega236/ioBroker.virtualpowermeter/master/admin/virtualpowermeter.png",
+    "readme": "https://github.com/Omega236/ioBroker.virtualpowermeter/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "energy",
+    "compact": true,
+    "supportCustoms": true,
+    "materialize": true,
+    "preserveSettings": "custom",
+    "dependencies": [
+      {
+        "admin": ">=3.0.0"
+      }
+    ],
+    "installedFrom": "https://github.com/Omega236/ioBroker.virtualpowermeter/tarball/CalcGroupOnlyAfterInitial"
+  },
+  "native": {
+    "option1": true,
+    "option2": "42"
+  },
+  "objects": [],
+  "instanceObjects": []
 }
