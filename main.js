@@ -37,11 +37,13 @@ class Virtualpowermeter extends utils.Adapter {
     this.subscribeForeignObjects('*')
     // repeat evey minute the calculation of the totalEnergy
     cron.schedule('* * * * *', async () => {
-      this.log.debug('cron started')
-      for (let oneOD in this.dicDatas) {
-        await this.setEnergy(this.dicDatas[oneOD])
+      if (this.initialfinished) {
+        this.log.debug('cron started')
+        for (let oneOD in this.dicDatas) {
+          await this.setEnergy(this.dicDatas[oneOD])
+        }
+        await this.setGroupEnergyAll()
       }
-      await this.setGroupEnergyAll()
     })
   }
 
@@ -111,11 +113,12 @@ class Virtualpowermeter extends utils.Adapter {
         }
       }
     }
+    this.initialfinished = true
     await this.setGroupPowerAll()
     await this.setGroupEnergyAll()
     await this.setGroupInfo()
     this.log.info('initial completed')
-    this.initialfinished = true
+    
   }
 
   /**
@@ -250,15 +253,17 @@ class Virtualpowermeter extends utils.Adapter {
   * set the groupinfo per group with the watched ids
   */
   async setGroupInfo () {
-    for (let group in this.dicGroups) {
-      let info = ''
-      let idGroupInfo
-      for (let id in this.dicGroups[group]) {
-        info += id + ';'
-        idGroupInfo = this.dicDatas[id].idGroupInfo
+    if (this.initialfinished) {
+      for (let group in this.dicGroups) {
+        let info = ''
+        let idGroupInfo
+        for (let id in this.dicGroups[group]) {
+          info += id + ';'
+          idGroupInfo = this.dicDatas[id].idGroupInfo
+        }
+        this.log.debug('setze ' + idGroupInfo + ' auf : ' + info)
+        await this.setStateAsync(idGroupInfo, { val: info, ack: true })
       }
-      this.log.debug('setze ' + idGroupInfo + ' auf : ' + info)
-      await this.setStateAsync(idGroupInfo, { val: info, ack: true })
     }
   }
   /**
@@ -275,15 +280,17 @@ class Virtualpowermeter extends utils.Adapter {
   * @param {string} group
   */
   async setGroupEnergy (group) {
-    let gesamt = 0
-    let idGroupEnergy
-    for (let id in this.dicGroups[group]) {
-      gesamt += this.dicDatas[id].currentEnergy
-      idGroupEnergy = this.dicDatas[id].idGroupEnergy
+    if (this.initialfinished) {
+      let gesamt = 0
+      let idGroupEnergy
+      for (let id in this.dicGroups[group]) {
+        gesamt += this.dicDatas[id].currentEnergy
+        idGroupEnergy = this.dicDatas[id].idGroupEnergy
+      }
+      gesamt = Math.round(gesamt * 100) / 100
+      this.log.debug('setze ' + idGroupEnergy + ' auf : ' + gesamt)
+      await this.setStateAsync(idGroupEnergy, { val: gesamt, ack: true })
     }
-    gesamt = Math.round(gesamt * 100) / 100
-    this.log.debug('setze ' + idGroupEnergy + ' auf : ' + gesamt)
-    await this.setStateAsync(idGroupEnergy, { val: gesamt, ack: true })
   }
 
   /**
@@ -299,14 +306,16 @@ class Virtualpowermeter extends utils.Adapter {
   * @param {string} group
   */
   async setGroupPower (group) {
-    let sum = 0
-    let idGroupPower
-    for (let id in this.dicGroups[group]) {
-      sum += this.dicDatas[id].currentPower
-      idGroupPower = this.dicDatas[id].idGroupPower
+    if (this.initialfinished) {
+      let sum = 0
+      let idGroupPower
+      for (let id in this.dicGroups[group]) {
+        sum += this.dicDatas[id].currentPower
+        idGroupPower = this.dicDatas[id].idGroupPower
+      }
+      this.log.debug('setze ' + idGroupPower + ' auf : ' + sum)
+      await this.setStateAsync(idGroupPower, { val: Math.round(sum * 100) / 100, ack: true })
     }
-    this.log.debug('setze ' + idGroupPower + ' auf : ' + sum)
-    await this.setStateAsync(idGroupPower, { val: Math.round(sum * 100) / 100, ack: true })
   }
 
   /**
