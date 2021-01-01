@@ -6,7 +6,6 @@ language: node_js
 node_js:
   - '10'
   - '12'
-  - 'node'
 env:
   - CXX=g++-6
 addons:
@@ -25,4 +24,5 @@ before_script:
 script:
   - 'npm run test:package'
   - 'npm run test:unit'
+  - 'export DEBUG=testing:*'
   - 'npm run test:integration'
