@@ -13,9 +13,9 @@ const cron = require('node-cron') // Cron Schedulervar
 const ObjectSettings = require('./ObjectSettings.js')
 
 class Virtualpowermeter extends utils.Adapter {
-  /**
-  * @param {Partial<ioBroker.AdapterOptions>} [options={}]
-  */
+	/**
+	 * @param {Partial<utils.AdapterOptions>} [options={}]
+	 */
   constructor (options) {
     super({
       ...options,
