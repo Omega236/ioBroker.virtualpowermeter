@@ -9,8 +9,8 @@
 			<input type="text" type="number" data-field="maxpower" size="30" data-default=50>
 			<span class="translate">Maximum consumption in watts when device is switched on or at 100%</span>
     		</div>
-		<div class="col s4">
-			<input type="text" data-field="group" size="30" data-default="light">
+		<div class="input-field col s4">
+			<input type="text" data-field="group" size="30" data-default="light" class="autocomplete">
 			<span class="translate">Group name (calculated consumption of the whole group)</span>
 		        
 		</div>
@@ -25,8 +25,7 @@
 			<br />
 			<span class="translate">use inverted value. if datapoint is 'SwitchedOff' you can inverted so it Calculates the Power on false and not on true</span>
     		</div>
-  	</div>
-  
+  	</div>  
 </script>
 
 <script type="text/javascript">
@@ -49,5 +48,45 @@
 				};
 			}
 		}
+	}
+
+	if (typeof customPostInits !== 'undefined') {
+		customPostInits.virtualpowermeter = function ($div, values, instanceObj, type, role) {
+			generateGroupAutoComplete($div, instanceObj._id.replace("system.adapter.", ""));
+		}
+	}
+
+	async function generateGroupAutoComplete($div, namespace) {
+		try {
+			let autoCompleteData = {};
+			let existingGroups = await getForeignObjects(`${namespace}.*.Virtual_Energy_Total_group_*`);
+
+			for (const group in existingGroups) {
+				let groupName = group.substring(group.lastIndexOf('_') + 1);
+				autoCompleteData[groupName] = null;
+			}
+
+			M.Autocomplete.init($div.find('.autocomplete'), {
+				data: autoCompleteData,
+				// sortFunction: function (a, b, inputString) {
+				// 	return a.localeCompare(b);
+				// },
+				minLength: 0
+			});
+		} catch (err) {
+			console.error(`[generateGroupAutoComplete] error: ${err.message}, stack: ${err.stack}`);
+		}
+	}
+
+	async function getForeignObjects(pattern) {
+		return new Promise((resolve, reject) => {
+			gMain.socket.emit('getForeignObjects', pattern, function (err, res) {
+				if (!err && res) {
+					resolve(res);
+				} else {
+					resolve(null);
+				}
+			});
+		});
 	}
 </script>

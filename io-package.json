@@ -53,6 +53,9 @@
     "authors": [
       "Lutz Sebastian <general.of.omega@googlemail.com>"
     ],
+    "contributors": [
+      "Scrounger"
+    ],
     "keywords": [
       "ioBroker",
       "template",
