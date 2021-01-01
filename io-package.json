@@ -81,8 +81,8 @@
     "installedFrom": "https://github.com/Omega236/ioBroker.virtualpowermeter/tarball/CalcGroupOnlyAfterInitial"
   },
   "native": {
-    "option1": true,
-    "option2": "42"
+    "defaultPowerName": "Virtual_Energy_Power",
+    "defaultEnergyName": "Virtual_Energy_Total"
   },
   "objects": [],
   "instanceObjects": []

@@ -15,9 +15,9 @@
 		        
 		</div>
 		<div  class="col S4">
-			<input type="text" data-field="idEnergyPower" size="30" data-default="Virtual_Energy_Power">
+			<input type="text" data-field="idEnergyPower" size="30" data-default="defaultPowerName">
 			<span class="translate">Datapointname for Power</span>
-		      	<input type="text" data-field="idEnergyTotal" size="30" data-default="Virtual_Energy_Total">
+		      	<input type="text" data-field="idEnergyTotal" size="30" data-default="defaultEnergyName">
       			<span class="translate">Datapointname for Energy</span>
 			<br />
 			<input type="checkbox" data-field="inverted" data-default="false"/>
@@ -30,9 +30,20 @@
 </script>
 
 <script type="text/javascript">
-	$.get("adapter/virtualpowermeter/words.js", function(script) {
+	$.get("adapter/virtualpowermeter/words.js", function (script) {
 		let translation = script.substring(script.indexOf('{'), script.length);
 		translation = translation.substring(0, translation.lastIndexOf(';'));
 		$.extend(systemDictionary, JSON.parse(translation));
 	});
+
+	if (typeof defaults !== 'undefined') {
+		defaults.virtualpowermeter = function (obj, instanceObj) {
+			if (instanceObj && instanceObj.native && instanceObj.native.defaultPowerName && instanceObj.native.defaultEnergyName) {
+				return {
+					idEnergyPower: instanceObj.native.defaultPowerName,
+					idEnergyTotal: instanceObj.native.defaultEnergyName
+				};
+			}
+		}
+	}
 </script>
