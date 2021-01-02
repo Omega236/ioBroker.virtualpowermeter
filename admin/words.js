@@ -133,5 +133,17 @@ systemDictionary = {
     "es": "Nombre predeterminado de energía del cuadro de diálogo personalizado",
     "pl": "Domyślna nazwa energii w oknie dialogowym niestandardowego",
     "zh-cn": "自定义对话框能量默认名称"
+  },
+  "calculated consumption of the whole group must be greater than old value": {
+    "en": "calculated consumption of the whole group must be greater than old value",
+    "de": "Der berechnete Verbrauch der gesamten Gruppe muss größer sein als der alte Wert",
+    "ru": "расчетное потребление всей группы должно быть больше старого значения",
+    "pt": "o consumo calculado de todo o grupo deve ser maior que o valor antigo",
+    "nl": "het berekende verbruik van de hele groep moet groter zijn dan de oude waarde",
+    "fr": "la consommation calculée de l'ensemble du groupe doit être supérieure à l'ancienne valeur",
+    "it": "il consumo calcolato dell'intero gruppo deve essere maggiore del vecchio valore",
+    "es": "el consumo calculado de todo el grupo debe ser mayor que el valor anterior",
+    "pl": "obliczone zużycie całej grupy musi być większe niż stara wartość",
+    "zh-cn": "整个组的估计消耗量必须大于旧值"
   }
 };

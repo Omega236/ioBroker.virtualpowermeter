@@ -85,7 +85,8 @@
   },
   "native": {
     "defaultPowerName": "Virtual_Energy_Power",
-    "defaultEnergyName": "Virtual_Energy_Total"
+    "defaultEnergyName": "Virtual_Energy_Total",
+    "groupEnergieMustBeGreater": false
   },
   "objects": [],
   "instanceObjects": []
