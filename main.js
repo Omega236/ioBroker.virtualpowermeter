@@ -67,7 +67,6 @@ class Virtualpowermeter extends utils.Adapter {
   async onStateChange(id, state) {
     if (state && this.initialfinished) {
       this.log.info(id + ' state changed')
-      this.log.info(JSON.stringify(state.oldState));
       await this.setEnergy(this.dicDatas[id])
       await this.setPower(this.dicDatas[id])
       await this.setGroupPower(this.dicDatas[id].group)
