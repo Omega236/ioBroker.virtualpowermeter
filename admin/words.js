@@ -2,18 +2,18 @@
 "use strict";
 
 systemDictionary = {
-	"virtualpowermeter adapter settings": {
-		"en": "Adapter settings for virtualpowermeter",
-		"de": "Adaptereinstellungen für virtualpowermeter",
-		"ru": "Настройки адаптера для virtualpowermeter",
-		"pt": "Configurações do adaptador para virtualpowermeter",
-		"nl": "Adapterinstellingen voor virtualpowermeter",
-		"fr": "Paramètres d'adaptateur pour virtualpowermeter",
-		"it": "Impostazioni dell'adattatore per virtualpowermeter",
-		"es": "Ajustes del adaptador para virtualpowermeter",
-		"pl": "Ustawienia adaptera dla virtualpowermeter",
-		"zh-cn": "virtualpowermeter的适配器设置"
-	},
+  "virtualpowermeter adapter settings": {
+    "en": "Adapter settings for virtualpowermeter",
+    "de": "Adaptereinstellungen für virtualpowermeter",
+    "ru": "Настройки адаптера для virtualpowermeter",
+    "pt": "Configurações do adaptador para virtualpowermeter",
+    "nl": "Adapterinstellingen voor virtualpowermeter",
+    "fr": "Paramètres d'adaptateur pour virtualpowermeter",
+    "it": "Impostazioni dell'adattatore per virtualpowermeter",
+    "es": "Ajustes del adaptador para virtualpowermeter",
+    "pl": "Ustawienia adaptera dla virtualpowermeter",
+    "zh-cn": "virtualpowermeter的适配器设置"
+  },
   "The adapter is configured via the data points of the energy consumers (for example, light.level)": {
     "en": "The adapter is configured via the data points of the energy consumers (for example, light.level)",
     "de": "Der Adapter wird über die Datenpunkte der Energieverbraucher konfiguriert (z. B. light.level).",
@@ -86,7 +86,7 @@ systemDictionary = {
     "pl": "Nazwa punktu danych dla energii",
     "zh-cn": "能源的数据点名称"
   },
-	"inverted": {
+  "inverted": {
     "en": "inverted",
     "de": "invertiert",
     "ru": "перевернутый",
@@ -109,5 +109,41 @@ systemDictionary = {
     "es": "utilizar valor invertido si el punto de datos está 'apagado', puede invertirlo para que calcule la potencia en falso y no en verdadero",
     "pl": "użyj odwróconej wartości. jeśli datapoint ma wartość „SwitchedOff”, możesz go odwrócić, aby obliczał Moc na false, a nie na true",
     "zh-cn": "使用倒数。如果datapoint是'SwitchedOff'，则可以将其取反，从而计算false而不是true的功率"
+  },
+  "Custom Dialog power default name": {
+    "en": "Custom Dialog power default name",
+    "de": "Leistung: Standardname für den benutzerdefinierten Dialog",
+    "ru": "Имя по умолчанию для настраиваемого диалогового окна",
+    "pt": "Nome padrão de energia da caixa de diálogo personalizada",
+    "nl": "Custom Dialog power standaard naam",
+    "fr": "Nom par défaut de l'alimentation de la boîte de dialogue personnalisée",
+    "it": "Nome predefinito di alimentazione della finestra di dialogo personalizzata",
+    "es": "Nombre predeterminado de energía del cuadro de diálogo personalizado",
+    "pl": "Domyślna nazwa zasilania okna dialogowego użytkownika",
+    "zh-cn": "自定义对话框电源默认名称"
+  },
+  "Custom Dialog energy default name": {
+    "en": "Custom Dialog energy default name",
+    "de": "Energie: Standardname für den benutzerdefinierten Dialog",
+    "ru": "Пользовательское имя диалога по умолчанию",
+    "pt": "Nome padrão de energia da caixa de diálogo personalizada",
+    "nl": "Custom Dialog Energy standaardnaam",
+    "fr": "Nom par défaut de l'énergie de la boîte de dialogue personnalisée",
+    "it": "Nome predefinito energia finestra di dialogo personalizzata",
+    "es": "Nombre predeterminado de energía del cuadro de diálogo personalizado",
+    "pl": "Domyślna nazwa energii w oknie dialogowym niestandardowego",
+    "zh-cn": "自定义对话框能量默认名称"
+  },
+  "calculated consumption of the whole group must be greater than old value": {
+    "en": "calculated consumption of the whole group must be greater than old value",
+    "de": "Der berechnete Verbrauch der gesamten Gruppe muss größer sein als der alte Wert",
+    "ru": "расчетное потребление всей группы должно быть больше старого значения",
+    "pt": "o consumo calculado de todo o grupo deve ser maior que o valor antigo",
+    "nl": "het berekende verbruik van de hele groep moet groter zijn dan de oude waarde",
+    "fr": "la consommation calculée de l'ensemble du groupe doit être supérieure à l'ancienne valeur",
+    "it": "il consumo calcolato dell'intero gruppo deve essere maggiore del vecchio valore",
+    "es": "el consumo calculado de todo el grupo debe ser mayor que el valor anterior",
+    "pl": "obliczone zużycie całej grupy musi być większe niż stara wartość",
+    "zh-cn": "整个组的估计消耗量必须大于旧值"
   }
 };
