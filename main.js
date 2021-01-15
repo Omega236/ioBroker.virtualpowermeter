@@ -1,6 +1,5 @@
 'use strict'
 
-
 /*
  * Created with @iobroker/create-adapter v1.9.0
  */
@@ -11,7 +10,6 @@ const utils = require('@iobroker/adapter-core')
 const cron = require('node-cron') // Cron Schedulervar
 
 const ObjectSettings = require('./ObjectSettings.js')
-
 class Virtualpowermeter extends utils.Adapter {
   /**
    * @param {Partial<utils.AdapterOptions>} [options={}]
@@ -21,6 +19,9 @@ class Virtualpowermeter extends utils.Adapter {
       ...options,
       name: 'virtualpowermeter'
     })
+
+    this.dicDatas = {}
+    this.dicGroups = {}
     this.initialfinished = false
     this.on('ready', this.onReady.bind(this))
     this.on('objectChange', this.onObjectChange.bind(this))
@@ -79,7 +80,6 @@ class Virtualpowermeter extends utils.Adapter {
   async initialObjects() {
     this.initialfinished = false
     this.log.info('inital all Objects')
-
     // all unsubscripe to begin completly new
     this.unsubscribeForeignStates('*')
     // delete all dics
@@ -96,20 +96,47 @@ class Virtualpowermeter extends utils.Adapter {
         } else {
           this.log.info('initial (enabled and maxPower OK): ' + iobrokerObject._id)
           var oS = new ObjectSettings(iobrokerObject, this.namespace)
-          this.dicDatas[oS.id] = oS
 
-          // needed for group calculations
-          if (!(oS.group in this.dicGroups)) {
-            this.dicGroups[oS.group] = {}
+
+          let cancelInit = false
+
+          if (oS.idPower == oS.idEnergy) {
+            this.log.error(`The Destination DP Power ('${oS.idPower}') is equal to the Destination DP Energy for ${oS.id}`)
+            cancelInit = true
           }
-          this.dicGroups[oS.group][oS.id] = {}
+          for (let oneOther in this.dicDatas) {
+            /**
+             * @type {ObjectSettings}
+             */
+            let otheroS = this.dicDatas[oneOther]
+            if (oS.idEnergy == otheroS.idEnergy || oS.idEnergy == otheroS.idPower) {
+              this.log.error(`The Destination DP Energy ('${oS.idEnergy}') for ${oS.id} is equal with a Destination DP for ${otheroS.id}`)
+              cancelInit = true
+            }
+            else if (oS.idPower == otheroS.idEnergy || oS.idPower == otheroS.idPower) {
+              this.log.error(`The Destination DP Power ('${oS.idPower}') for ${oS.id} is equal with a Destination DP for ${otheroS.id}`)
+              cancelInit = true
+            }
 
-          await this.createObjectsForId(oS)
-          this.log.debug('subscribeForeignStates ' + oS.id)
-          await this.subscribeForeignStatesAsync(oS.id)
-          await this.setEnergy(oS)
-          await this.setPower(oS)
-          this.log.debug('initial done ' + iobrokerObject._id)
+          }
+          if (cancelInit == false) {
+            this.dicDatas[oS.id] = oS
+
+            // needed for group calculations
+            if (!(oS.group in this.dicGroups)) {
+              this.dicGroups[oS.group] = {}
+            }
+            this.dicGroups[oS.group][oS.id] = {}
+
+            await this.createObjectsForId(oS)
+            this.log.debug('subscribeForeignStates ' + oS.id)
+            await this.subscribeForeignStatesAsync(oS.id)
+            await this.setEnergy(oS)
+            await this.setPower(oS)
+            this.log.info('initial done ' + iobrokerObject._id + ' Destination Power: ' + oS.idPower + ' Destination EnergyTotal: ' + oS.idEnergy + ' Destination Group: ' + oS.idGroup)
+
+          }
+
         }
       }
     }
@@ -118,7 +145,6 @@ class Virtualpowermeter extends utils.Adapter {
     await this.setGroupEnergyAll()
     await this.setGroupInfo()
     this.log.info('initial completed')
-
   }
 
   /**
@@ -130,7 +156,7 @@ class Virtualpowermeter extends utils.Adapter {
     // Den State auslesen (z.B. true/false oder 0%,20%,100%)
     let objState = await this.getForeignStateAsync(oS.id)
     if (objState) {
-      let theValueAbsolut = objState.val * oS.multi
+      let theValueAbsolut = Number(objState.val) * oS.multi
       if (oS.inverted) {
         theValueAbsolut = (theValueAbsolut - 1) * -1
       }
@@ -151,7 +177,7 @@ class Virtualpowermeter extends utils.Adapter {
     // EnergyTotal auslesen, timestamp und aktueller wert wird benötigt
     let objidEnergy = await this.getForeignStateAsync(oS.idEnergy)
     if (objidEnergy) {
-      oldEnergy = objidEnergy.val
+      oldEnergy = Number(objidEnergy.val)
       oldts = objidEnergy.ts
     }
     // berechnen wieviel wh dazukommen (alles auf 2 nachkomma runden)
@@ -179,8 +205,7 @@ class Virtualpowermeter extends utils.Adapter {
         desc: 'Created by virtualpowermeter',
         unit: 'Watt',
         read: true,
-        write: false,
-        def: 0
+        write: false
       },
       native: {}
     })
@@ -195,8 +220,7 @@ class Virtualpowermeter extends utils.Adapter {
         desc: 'Created by virtualpowermeter',
         unit: 'Wh',
         read: true,
-        write: false,
-        def: 0
+        write: false
       },
       native: {}
     })
@@ -212,8 +236,7 @@ class Virtualpowermeter extends utils.Adapter {
         desc: 'Created by virtualpowermeter',
         unit: 'Watt',
         read: true,
-        write: false,
-        def: 0
+        write: false
       },
       native: {}
     })
@@ -228,8 +251,7 @@ class Virtualpowermeter extends utils.Adapter {
         desc: 'Created by virtualpowermeter',
         unit: 'Wh',
         read: true,
-        write: false,
-        def: 0
+        write: false
       },
       native: {}
     })
@@ -290,21 +312,21 @@ class Virtualpowermeter extends utils.Adapter {
       gesamt = Math.round(gesamt * 100) / 100
 
       if (this.config.groupEnergieMustBeGreater) {
-        let oldState = await this.getStateAsync(idGroupEnergy);
+        let oldState = await this.getStateAsync(idGroupEnergy)
 
         if (oldState && oldState.val) {
           if (gesamt >= oldState.val) {
-            await this.setStateAsync(idGroupEnergy, { val: gesamt, ack: true });
+            await this.setStateAsync(idGroupEnergy, { val: gesamt, ack: true })
           } else {
-            this.log.warn(`old value '${oldState.val}' is greater than new value '${gesamt}' -> no action`);
+            this.log.warn(`old value '${oldState.val}' is greater than new value '${gesamt}' -> no action`)
           }
         } else {
           this.log.debug('setze ' + idGroupEnergy + ' auf : ' + gesamt)
-          await this.setStateAsync(idGroupEnergy, { val: gesamt, ack: true });
+          await this.setStateAsync(idGroupEnergy, { val: gesamt, ack: true })
         }
       } else {
         this.log.debug('setze ' + idGroupEnergy + ' auf : ' + gesamt)
-        await this.setStateAsync(idGroupEnergy, { val: gesamt, ack: true });
+        await this.setStateAsync(idGroupEnergy, { val: gesamt, ack: true })
       }
     }
   }
@@ -349,11 +371,11 @@ class Virtualpowermeter extends utils.Adapter {
     }
   }
 }
-
+// @ts-ignore parent is a valid property on module
 if (module.parent) {
   // Export the constructor in compact mode
   /**
-  * @param {Partial<ioBroker.AdapterOptions>} [options={}]
+  * @param {Partial<utils.AdapterOptions>} [options={}]
   */
   module.exports = (options) => new Virtualpowermeter(options)
 } else {

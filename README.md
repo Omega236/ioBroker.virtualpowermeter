@@ -34,44 +34,80 @@ Beispiel mit valuetrackerovertime:
 <img src="MeinBeispiel2.jpg" />
 
 
+##DestinationDatapoints
+Rules for DestinationDatapoints (DP for Power and  DP for Energy )
+
+if without '.' und '~' = '.' is added at the beginning
+
+starts with '.' = current folder path is added at the beginning
+starts with '~' = 'virtualpowermeter.0.group_xxx.' is added at the beginning
+
+ends with . = add 'Virtual_Energy_Power' or 'Virtual_Energy_Total' at the end
+ends with ~ = add objectID (with replaced '.' by '_' ) + '.Virtual_Energy_Power' an
+
+
+Examples:
+group: light
+Objectid: 0_userstate.roomx.switch
+for Power
+  
+. => id:0_userstate.roomx.Virtual_Energy_Power
+beliebigerText => id:0_userstate.roomx.beliebigerText
+beliebiger.Text => id:beliebiger.Text
+beliebiger.Text. => id:beliebiger.Text.Virtual_Energy_Power
+.beliebigerText => id:0_userstate.roomx.beliebigerText
+.beliebiger.Text => id:0_userstate.roomx.beliebiger.Text
+.beliebiger.Text. => id:0_userstate.roomx.beliebiger.Text.Virtual_Energy_Power
+~ => id:virtualpowermeter.0.group_light.0_userstate_roomx_switch
+~beliebigerText => id:virtualpowermeter.0.group_light.beliebigerText
+~beliebiger.Text => id:virtualpowermeter.0.group_light.beliebiger.Text
+~beliebiger.Text. => id:virtualpowermeter.0.group_light.beliebiger.Text.Virtual_Energy_Power
+
+
 ## Changelog
+### 1.3.0 (2021-01-15)
+* (scrounger) default ids for power and energie configurable through adapter settings
+* (scrounger) custom: autocomplete for group input added
+* (scrounger) option added -> group energy values can only increase 
+* (Omega236) Check duplicate Destination DP
+* (Omega236n) allows to Set Destination DP to VPM-Group (~)
 ### 1.2.2 (2020-12-26
-* (Lutz Sebastian) Group Calculations only after InitialFinished
+* (Omega236) Group Calculations only after InitialFinished
 ### 1.2.1 (2020-04-15)
-* (Lutz Sebastian) translation
+* (Omega236) translation
 ### 1.2.0 (2020-04-15)
-* (Lutz Sebastian) js-controller 3.x support
+* (Omega236) js-controller 3.x support
 ### 1.1.1 (2020-04-07)
-* (Lutz Sebastian) bugfix translation
+* (Omega236) bugfix translation
 ### 1.1.0 (2020-04-05)
-* (Lutz Sebastian) inverted added
+* (Omega236) inverted added
 ### 1.0.1
-* (Lutz Sebastian) SecurityUpdates
+* (Omega236) SecurityUpdates
 ### 1.0.0
-* (Lutz Sebastian) Final Release
+* (Omega236) Final Release
 ### 0.2.8
-* (Lutz Sebastian) Bug found on travis unsubscribeStatesAsync
+* (Omega236) Bug found on travis unsubscribeStatesAsync
 ### 0.2.6
-* (Lutz Sebastian) texts adapted
+* (Omega236) texts adapted
 ### 0.2.5
-* (Lutz Sebastian) awaits missing
+* (Omega236) awaits missing
 ### 0.2.4
-* (Lutz Sebastian) var remove and SettingPage Info and dic in class and .bind(this) (Template 1.10)
+* (Omega236) var remove and SettingPage Info and dic in class and .bind(this) (Template 1.10)
 ### 0.2.3
-* (Lutz Sebastian) CodeOptimierung nach eslint
+* (Omega236) CodeOptimierung nach eslint
 ### 0.2.1
-* (Lutz Sebastian) CodeOptimierung und bild
+* (Omega236) CodeOptimierung und bild
 ### 0.2.0
-* (Lutz Sebastian) Alle Funktionen implementiert, code noch nicht überprüft/optimiert/getestet
+* (Omega236) Alle Funktionen implementiert, code noch nicht überprüft/optimiert/getestet
 ### 0.1.0
-* (Lutz Sebastian) Erste Version mit Grundfunktionalität
+* (Omega236) Erste Version mit Grundfunktionalität
 ### 0.0.1
-* (Lutz Sebastian) initial release
+* (Omega236) initial release
 
 ## License
 MIT License
 
-Copyright (c) 2021 Lutz Sebastian general.of.omega@googlemail.com
+Copyright (c) 2021 Omega236 general.of.omega@googlemail.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

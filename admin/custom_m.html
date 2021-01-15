@@ -8,24 +8,30 @@
 		<div class="col s2">
 			<input type="text" type="number" data-field="maxpower" size="30" data-default=50>
 			<span class="translate">Maximum consumption in watts when device is switched on or at 100%</span>
-    		</div>
-		<div class="input-field col s4">
+    </div>
+		<div class="input-field col s2">
 			<input type="text" data-field="group" size="30" data-default="light" class="autocomplete">
 			<span class="translate">Group name (calculated consumption of the whole group)</span>
 		        
 		</div>
-		<div  class="col S4">
+		<div  class="col S4 ">
 			<input type="text" data-field="idEnergyPower" size="30">
 			<span class="translate">Datapointname for Power</span>
-		      	<input type="text" data-field="idEnergyTotal" size="30">
-      			<span class="translate">Datapointname for Energy</span>
-			<br />
+		  <input type="text" data-field="idEnergyTotal" size="30">
+      <span class="translate">Datapointname for Energy</span>
+      <br />
+      <a href='https://github.com/Omega236/ioBroker.virtualpowermeter/blob/master/README.md#DestinationDatapoints'><span>&#8505;</span> Details for Destination Datapoints</a>
+
+    </div>
+    <div  class="col S2">
 			<input type="checkbox" data-field="inverted" data-default="false"/>
 			<span class="translate">inverted</span>
 			<br />
 			<span class="translate">use inverted value. if datapoint is 'SwitchedOff' you can inverted so it Calculates the Power on false and not on true</span>
-    		</div>
-  	</div>  
+    </div>
+  </div>  
+
+  
 </script>
 
 <script type="text/javascript">
