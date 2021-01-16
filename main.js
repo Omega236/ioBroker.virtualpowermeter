@@ -67,10 +67,13 @@ class Virtualpowermeter extends utils.Adapter {
   async onStateChange(id, state) {
     if (state && this.initialfinished) {
       this.log.debug(id + ' state changed')
-      await this.setEnergy(this.dicDatas[id])
-      await this.setPower(this.dicDatas[id])
-      await this.setGroupPower(this.dicDatas[id].group)
-      await this.setGroupEnergy(this.dicDatas[id].group)
+      let oS = this.dicDatas[id]
+      if (oS && oS != undefined){
+        await this.setEnergy(oS)
+        await this.setPower(oS)
+        await this.setGroupPower(oS.group)
+        await this.setGroupEnergy(oS.group)
+      }
     }
   }
 
@@ -81,7 +84,7 @@ class Virtualpowermeter extends utils.Adapter {
     this.initialfinished = false
     this.log.info('inital all Objects')
     // all unsubscripe to begin completly new
-    this.unsubscribeForeignStates('*')
+    await this.unsubscribeForeignStatesAsync('*')
     // delete all dics
     this.dicGroups = {}
     this.dicDatas = {}
@@ -120,7 +123,6 @@ class Virtualpowermeter extends utils.Adapter {
 
           }
           if (cancelInit == false) {
-            this.dicDatas[oS.id] = oS
 
             // needed for group calculations
             if (!(oS.group in this.dicGroups)) {
@@ -130,6 +132,7 @@ class Virtualpowermeter extends utils.Adapter {
 
             await this.createObjectsForId(oS)
             this.log.debug('subscribeForeignStates ' + oS.id)
+            this.dicDatas[oS.id] = oS
             await this.subscribeForeignStatesAsync(oS.id)
             await this.setEnergy(oS)
             await this.setPower(oS)
@@ -363,8 +366,8 @@ class Virtualpowermeter extends utils.Adapter {
   async onUnload(callback) {
     try {
       this.log.info('cleaned everything up...')
-      this.unsubscribeForeignStates('*')
-      this.unsubscribeForeignObjects('*')
+      await this.unsubscribeForeignStatesAsync ('*')
+      await this.unsubscribeForeignObjectsAsync('*')
       callback()
     } catch (e) {
       callback()
