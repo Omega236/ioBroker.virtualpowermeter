@@ -34,43 +34,13 @@ Beispiel mit valuetrackerovertime:
 <img src="MeinBeispiel2.jpg" />
 
 
-##DestinationDatapoints
-Rules for DestinationDatapoints (DP for Power and  DP for Energy )
-
-if without '.' und '~' = '.' is added at the beginning
-
-starts with '.' = current folder path is added at the beginning
-starts with '~' = 'virtualpowermeter.0.group_xxx.' is added at the beginning
-
-ends with . = add 'Virtual_Energy_Power' or 'Virtual_Energy_Total' at the end
-ends with ~ = add objectID (with replaced '.' by '_' ) + '.Virtual_Energy_Power' an
-
-
-Examples:
-group: light
-Objectid: 0_userstate.roomx.switch
-for Power
-  
-. => id:0_userstate.roomx.Virtual_Energy_Power
-beliebigerText => id:0_userstate.roomx.beliebigerText
-beliebiger.Text => id:beliebiger.Text
-beliebiger.Text. => id:beliebiger.Text.Virtual_Energy_Power
-.beliebigerText => id:0_userstate.roomx.beliebigerText
-.beliebiger.Text => id:0_userstate.roomx.beliebiger.Text
-.beliebiger.Text. => id:0_userstate.roomx.beliebiger.Text.Virtual_Energy_Power
-~ => id:virtualpowermeter.0.group_light.0_userstate_roomx_switch
-~beliebigerText => id:virtualpowermeter.0.group_light.beliebigerText
-~beliebiger.Text => id:virtualpowermeter.0.group_light.beliebiger.Text
-~beliebiger.Text. => id:virtualpowermeter.0.group_light.beliebiger.Text.Virtual_Energy_Power
-
-
 ## Changelog
 ### 1.3.0 (2021-01-15)
 * (scrounger) default ids for power and energie configurable through adapter settings
 * (scrounger) custom: autocomplete for group input added
 * (scrounger) option added -> group energy values can only increase 
 * (Omega236) Check duplicate Destination DP
-* (Omega236n) allows to Set Destination DP to VPM-Group (~)
+* (Omega236n) allows to Set Destination of DP
 ### 1.2.2 (2020-12-26
 * (Omega236) Group Calculations only after InitialFinished
 ### 1.2.1 (2020-04-15)
