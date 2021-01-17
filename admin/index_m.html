@@ -90,7 +90,17 @@
 				<input type="checkbox" class="value" id="groupEnergieMustBeGreater" />
 				<label for="groupEnergieMustBeGreater" class="translate">calculated consumption of the whole group must be greater than old value</label>
 			</div>						
-		</div>
+    </div>
+    <div class="row">
+      <div  class="col S6 ">
+        <select data-field="defaultDPDestination" id="defaultDPDestination" class="value">
+          <option value="inGroup">in Group tree</option>
+          <option value="inState">in current state tree</option>
+          <option value="anywhere">anywhere else</option>
+        </select>
+        <span class="translate" for="defaultDPDestination">default setting: Datapoint Destination</label>
+    </div>
+    </div>
 	</div>
 
 </body>

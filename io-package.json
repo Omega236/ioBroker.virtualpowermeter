@@ -89,7 +89,8 @@
   "native": {
     "defaultPowerName": "Virtual_Energy_Power",
     "defaultEnergyName": "Virtual_Energy_Total",
-    "groupEnergieMustBeGreater": false
+    "groupEnergieMustBeGreater": false,
+    "defaultDPDestination": "inState"
   },
   "objects": [],
   "instanceObjects": []

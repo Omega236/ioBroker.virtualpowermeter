@@ -4,7 +4,7 @@ class ObjectSettings {
   * @param {string} namespace
   * @param {ioBroker.Object } iobrokerObject
   */
-  constructor (iobrokerObject, namespace) {
+  constructor(iobrokerObject, namespace, defaultPowerName, defaultEnergyName) {
     this.id = iobrokerObject._id
     this.iobrokerObject = iobrokerObject
     this.group = iobrokerObject.common.custom[namespace].group
@@ -27,29 +27,28 @@ class ObjectSettings {
     // if starts with . means Create under current
     // only . means ur.id.defaultEnergy_Power
 
-    this.idPower = this.GenerateIDFromRelative(iobrokerObject.common.custom[namespace].idEnergyPower, idParent, this.idGroup, 'Virtual_Energy_Power')
+    this.DPDestination = iobrokerObject.common.custom[namespace].DPDestination
 
-    this.idEnergy = this.GenerateIDFromRelative(iobrokerObject.common.custom[namespace].idEnergyTotal, idParent, this.idGroup, 'Virtual_Energy_Total')
+    this.idPower = this.GenerateIDFromRelative(iobrokerObject.common.custom[namespace].idEnergyPower, idParent, defaultPowerName)
+
+    this.idEnergy = this.GenerateIDFromRelative(iobrokerObject.common.custom[namespace].idEnergyTotal, idParent, defaultEnergyName)
   }
 
-  GenerateIDFromRelative (relativeID, idParent, idGroup, defaultname) {
-    if (!relativeID.includes('.') && !relativeID.includes('~')) {
-      relativeID = '.' + relativeID
-    }
-    if (relativeID.endsWith('~')) {
-      relativeID += this.id.split('.').join('_') + '.'
-    }
-    if (relativeID.endsWith('.')) {
-      relativeID += defaultname
-    }
-    if (relativeID.startsWith('.')) {
-      relativeID = idParent + relativeID.substr(1)
-    }
-    if (relativeID.startsWith('~')) {
-      if (relativeID.startsWith('~.')) {
-        relativeID = relativeID.substr(1)
-      }
-      relativeID = idGroup + relativeID.substr(1)
+  /**
+   *
+   * @param {string} relativeID
+   * @param {string} idParent
+   * @param {string} defaultname
+   * @returns {String}
+   */
+  GenerateIDFromRelative(relativeID, idParent, defaultname) {
+    if (this.DPDestination === 'inState') {
+      if (relativeID.startsWith('.')) { relativeID = relativeID.substr(1) }
+      relativeID = idParent + relativeID
+    } else if (this.DPDestination === 'inGroup') {
+      if (relativeID.startsWith('.')) { relativeID = relativeID.substr(1) }
+      relativeID = this.idGroup + relativeID
+    } else if (this.DPDestination === 'anywhere') {
     }
     return relativeID
   }

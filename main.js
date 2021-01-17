@@ -22,7 +22,7 @@ class Virtualpowermeter extends utils.Adapter {
 
     this.dicDatas = {}
     this.dicGroups = {}
-    this.initialfinished = false
+    this.doingInitial = false
     this.on('ready', this.onReady.bind(this))
     this.on('objectChange', this.onObjectChange.bind(this))
     this.on('stateChange', this.onStateChange.bind(this))
@@ -34,11 +34,17 @@ class Virtualpowermeter extends utils.Adapter {
   * Is called when databases are connected and adapter received configuration.
   */
   async onReady() {
+    if (this.config.defaultPowerName === undefined) {
+      this.config.defaultPowerName = 'Virtual_Energy_Power'
+    }
+    if (this.config.defaultEnergyName === undefined) {
+      this.config.defaultEnergyName = 'Virtual_Energy_Total'
+    }
     await this.initialObjects()
     this.subscribeForeignObjects('*')
     // repeat evey minute the calculation of the totalEnergy
-    cron.schedule('* * * * *', async () => {
-      if (this.initialfinished) {
+    cron.schedule('* * * * *', async() => {
+      if (!this.doingInitial) {
         this.log.debug('cron started')
         for (let oneOD in this.dicDatas) {
           await this.setEnergy(this.dicDatas[oneOD])
@@ -65,10 +71,10 @@ class Virtualpowermeter extends utils.Adapter {
   * @param {ioBroker.State | null | undefined} state
   */
   async onStateChange(id, state) {
-    if (state && this.initialfinished) {
+    if (state && !this.doingInitial) {
       this.log.debug(id + ' state changed')
       let oS = this.dicDatas[id]
-      if (oS && oS != undefined){
+      if (oS && oS !== undefined) {
         await this.setEnergy(oS)
         await this.setPower(oS)
         await this.setGroupPower(oS.group)
@@ -76,12 +82,22 @@ class Virtualpowermeter extends utils.Adapter {
       }
     }
   }
-
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
   /**
   * create for every enabled object the needed stats and set it to initial it
   */
   async initialObjects() {
-    this.initialfinished = false
+    // wait finish old initial, otherwise  multiple Initial mixed
+    if (this.doingInitial) {
+      this.log.info(`wait for init!!!`)
+      while (this.doingInitial) {
+        await this.sleep(500)
+      }
+    }
+
+    this.doingInitial = true
     this.log.info('inital all Objects')
     // all unsubscripe to begin completly new
     await this.unsubscribeForeignStatesAsync('*')
@@ -90,6 +106,27 @@ class Virtualpowermeter extends utils.Adapter {
     this.dicDatas = {}
     // read out all Objects
     let objects = await this.getForeignObjectsAsync('')
+    // ###########
+    // Migrate from pre 1.3.0
+    // ###########
+    for (let idobject in objects) {
+      let iobrokerObject = objects[idobject]
+      // only do something when enabled and MaxPowerset
+      if (iobrokerObject && iobrokerObject.common && iobrokerObject.common.custom && iobrokerObject.common.custom[this.namespace] && iobrokerObject.common.custom[this.namespace].enabled && iobrokerObject.common.custom[this.namespace].maxpower) {
+        if (iobrokerObject.common.custom[this.namespace].DPDestination === undefined) {
+          if (!(String(iobrokerObject.common.custom[this.namespace].idEnergyPower).includes('.'))) {
+            iobrokerObject.common.custom[this.namespace].DPDestination = 'inState'
+          } else {
+            iobrokerObject.common.custom[this.namespace].DPDestination = 'anywhere'
+          }
+          this.log.info(`${idobject} migrate to new datastructure >=1.3.0 (DPDestination: ${iobrokerObject.common.custom[this.namespace].DPDestination} )`)
+          await this.setForeignObjectAsync(idobject, iobrokerObject)
+        }
+      }
+    }
+    // ###########
+    // End Migrate
+    // ###########
     for (let idobject in objects) {
       let iobrokerObject = objects[idobject]
       // only do something when enabled and MaxPowerset
@@ -98,12 +135,20 @@ class Virtualpowermeter extends utils.Adapter {
           this.log.error('Max Power from ' + iobrokerObject._id + ' is not a number: "' + iobrokerObject.common.custom[this.namespace].maxpower + '"')
         } else {
           this.log.info('initial (enabled and maxPower OK): ' + iobrokerObject._id)
-          var oS = new ObjectSettings(iobrokerObject, this.namespace)
-
+          var oS = new ObjectSettings(iobrokerObject, this.namespace, this.config.defaultPowerName, this.config.defaultEnergyName)
 
           let cancelInit = false
 
-          if (oS.idPower == oS.idEnergy) {
+          if (!oS.idPower.includes('.')) {
+            this.log.error(`The Destination DP Power ('${oS.idPower}') seems to be invalid(${oS.id})`)
+            cancelInit = true
+          }
+          if (!oS.idEnergy.includes('.')) {
+            this.log.error(`The Destination DP Energy ('${oS.idEnergy}') seems to be invalid(${oS.id})`)
+            cancelInit = true
+          }
+
+          if (oS.idPower === oS.idEnergy) {
             this.log.error(`The Destination DP Power ('${oS.idPower}') is equal to the Destination DP Energy for ${oS.id}`)
             cancelInit = true
           }
@@ -112,18 +157,15 @@ class Virtualpowermeter extends utils.Adapter {
              * @type {ObjectSettings}
              */
             let otheroS = this.dicDatas[oneOther]
-            if (oS.idEnergy == otheroS.idEnergy || oS.idEnergy == otheroS.idPower) {
+            if (oS.idEnergy === otheroS.idEnergy || oS.idEnergy === otheroS.idPower) {
               this.log.error(`The Destination DP Energy ('${oS.idEnergy}') for ${oS.id} is equal with a Destination DP for ${otheroS.id}`)
               cancelInit = true
-            }
-            else if (oS.idPower == otheroS.idEnergy || oS.idPower == otheroS.idPower) {
+            } else if (oS.idPower === otheroS.idEnergy || oS.idPower === otheroS.idPower) {
               this.log.error(`The Destination DP Power ('${oS.idPower}') for ${oS.id} is equal with a Destination DP for ${otheroS.id}`)
               cancelInit = true
             }
-
           }
-          if (cancelInit == false) {
-
+          if (cancelInit === false) {
             // needed for group calculations
             if (!(oS.group in this.dicGroups)) {
               this.dicGroups[oS.group] = {}
@@ -137,13 +179,11 @@ class Virtualpowermeter extends utils.Adapter {
             await this.setEnergy(oS)
             await this.setPower(oS)
             this.log.info('initial done ' + iobrokerObject._id + ' Destination Power: ' + oS.idPower + ' Destination EnergyTotal: ' + oS.idEnergy + ' Destination Group: ' + oS.idGroup)
-
           }
-
         }
       }
     }
-    this.initialfinished = true
+    this.doingInitial = false
     await this.setGroupPowerAll()
     await this.setGroupEnergyAll()
     await this.setGroupInfo()
@@ -278,7 +318,7 @@ class Virtualpowermeter extends utils.Adapter {
   * set the groupinfo per group with the watched ids
   */
   async setGroupInfo() {
-    if (this.initialfinished) {
+    if (!this.doingInitial) {
       for (let group in this.dicGroups) {
         let info = ''
         let idGroupInfo
@@ -305,7 +345,7 @@ class Virtualpowermeter extends utils.Adapter {
   * @param {string} group
   */
   async setGroupEnergy(group) {
-    if (this.initialfinished) {
+    if (!this.doingInitial) {
       let gesamt = 0
       let idGroupEnergy
       for (let id in this.dicGroups[group]) {
@@ -321,7 +361,7 @@ class Virtualpowermeter extends utils.Adapter {
           if (gesamt >= oldState.val) {
             await this.setStateAsync(idGroupEnergy, { val: gesamt, ack: true })
           } else {
-            this.log.warn(`old value '${oldState.val}' is greater than new value '${gesamt}' -> no action`)
+            this.log.warn(`group ${group}: old value '${oldState.val}' is greater than new value '${gesamt}' -> no action`)
           }
         } else {
           this.log.debug('setze ' + idGroupEnergy + ' auf : ' + gesamt)
@@ -347,7 +387,7 @@ class Virtualpowermeter extends utils.Adapter {
   * @param {string} group
   */
   async setGroupPower(group) {
-    if (this.initialfinished) {
+    if (!this.doingInitial) {
       let sum = 0
       let idGroupPower
       for (let id in this.dicGroups[group]) {
@@ -366,7 +406,7 @@ class Virtualpowermeter extends utils.Adapter {
   async onUnload(callback) {
     try {
       this.log.info('cleaned everything up...')
-      await this.unsubscribeForeignStatesAsync ('*')
+      await this.unsubscribeForeignStatesAsync('*')
       await this.unsubscribeForeignObjectsAsync('*')
       callback()
     } catch (e) {

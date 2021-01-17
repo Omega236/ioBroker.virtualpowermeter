@@ -1,34 +1,44 @@
 <script type="text/x-iobroker" data-template-name="virtualpowermeter">
 	<div class="row">
 		<div class="col s2">
-			<input type="checkbox" data-field="enabled" data-default="false"/>
+			<input type="checkbox" data-field="enabled" />
 			<!-- this field is mandatory, just to find out if to include this settings or not</span-->
-			<span class="translate">enabled</span>
+      <span class="translate">enabled</span>
+
+      <br />
+      <br />
+
+      <input type="checkbox" data-field="inverted" />
+			<span class="translate">inverted</span>
+			<br />
+			<span class="translate">use inverted value. if datapoint is 'SwitchedOff' you can inverted so it Calculates the Power on false and not on true</span>
+
+
 		</div>
 		<div class="col s2">
-			<input type="text" type="number" data-field="maxpower" size="30" data-default=50>
+			<input type="text" type="number" data-field="maxpower" size="30">
 			<span class="translate">Maximum consumption in watts when device is switched on or at 100%</span>
-    </div>
-		<div class="input-field col s2">
-			<input type="text" data-field="group" size="30" data-default="light" class="autocomplete">
+			<input type="text" data-field="group" size="30"  class="autocomplete">
 			<span class="translate">Group name (calculated consumption of the whole group)</span>
 		        
 		</div>
 		<div  class="col S4 ">
-			<input type="text" data-field="idEnergyPower" size="30">
-			<span class="translate">Datapointname for Power</span>
+        <select data-field="DPDestination" id="DPDestination" class="value">
+          <option value="inGroup">in Group tree</option>
+          <option value="inState">in current state tree</option>
+          <option value="anywhere">anywhere else</option>
+        </select>
+        <span class="translate" for="DPDestination">Datapoint Destination</label>
+        
+    </div>
+    <div class="input-field col s4">
+      <input type="text" data-field="idEnergyPower" size="30">
+      <span class="translate">Datapointname for Datapoint Power</span>
 		  <input type="text" data-field="idEnergyTotal" size="30">
       <span class="translate">Datapointname for Energy</span>
       <br />
-      <a href='https://github.com/Omega236/ioBroker.virtualpowermeter/blob/master/README.md#DestinationDatapoints'> <span>"~" = Destination in group folder; "." = Destination in same folder</span> </a> 
+    </div>
 
-    </div>
-    <div  class="col S2">
-			<input type="checkbox" data-field="inverted" data-default="false"/>
-			<span class="translate">inverted</span>
-			<br />
-			<span class="translate">use inverted value. if datapoint is 'SwitchedOff' you can inverted so it Calculates the Power on false and not on true</span>
-    </div>
   </div>  
 
   
@@ -48,9 +58,17 @@
 	if (typeof defaults !== 'undefined') {
 		defaults.virtualpowermeter = function (obj, instanceObj) {
 			if (instanceObj && instanceObj.native && instanceObj.native.defaultPowerName && instanceObj.native.defaultEnergyName) {
-				return {
-					idEnergyPower: instanceObj.native.defaultPowerName,
-					idEnergyTotal: instanceObj.native.defaultEnergyName
+        let isInGroup =  instanceObj.native.defaultDPDestination == "inGroup"
+        let idstring = isInGroup ? (String(obj._id)).split(".").join("_") + ".": ""
+        //if Destination inGroup add the id to the defaultnames
+        return {
+          idEnergyPower: idstring + instanceObj.native.defaultPowerName,
+          idEnergyTotal: idstring + instanceObj.native.defaultEnergyName,
+          inverted: false,
+          group: "light",
+          maxpower: 50,
+          enabled: false,
+          DPDestination: instanceObj.native.defaultDPDestination
 				};
 			}
 		}
