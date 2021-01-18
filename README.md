@@ -27,8 +27,26 @@ Mit diesen neuen Datenpunkten kann dann eine Einfache Visualiserung durchgeführ
 
 Die neuen Datenpunkte (besonders die Gruppen) könnten super mit valuetrackerovertime weiterverarbeitet werden
 
-Die neuen Datenpunkte für Power und Total werden normal im gleichen Verzeichnis wie die überwachten States abgelegt. Sobald der Pfad einen "." enthält wird das Verzeichnis als Absolut betrachtet und unter dieser id abgelegt. Hier ist es sinnvoll die Datenpunkte in das eigene virtualpowermeter.0 abzulegen (aufpassen dass man die Ids nicht doppelt verwendet.)
-<img src="https://user-images.githubusercontent.com/25373047/104218659-5920eb80-543d-11eb-8e20-774822d489a7.png" />
+## Instance Settings
+
+<img src="admin/InstanceSettings.PNG" />
+
+hier kan der Default-Name für das Power und Energy_Total definiert werden.
+
+Die Checkbox "Der berechnete Verbrauch der gesamten Gruppe muss größer sein als sein als der alte Wert" bewirkt dass wenn ein GruppenErgenis kleiner als der State ist, nur eine Warnung ausgegeben wird. Dies ist Sinnvoll, da man so sofort erkennt dass etwas schiefläuft (z.B. von einem State den Total DP-Name verändert und dadurch fängt dieser bei 0 an). Falls man wirklich will dass der Zähler bei der kleineren Zahl weiter macht, muss in Objecte für diesen State einmal manuell dieser kleinere Wert eingetragen werden (oder checkbox deaktiveren).
+
+Die Einstellung default setting: Datapoint Destination bestimmt die default Einstellung beim erstellen eines neuen Custom-Settings. Bei "in the state folder" wird bei neuen Custom-Settings die Standardnamen für Power und Energie genutz. Bei "in group" wird als Standardname die ObjectID des Custom-DP (. durch _ ersetzt) als Unterverzeichnis + der Standardname für Power und Energie genutz. "anywhere else" nutzt ebenfalls den Standardname für Power und Engery muss aber für jeden Custom-DP manuell angepasst werden.
+
+
+## Custom Settings 
+<img src="admin/DatapointSample.PNG" />
+Die aktivierung eines Custom-Settings aktiviert 2 Datenpunkte. Power -> Watt, Energy(_Total) -> Wh
+Der Speicherort setzt sich aus dem Datapoint Destination + Datapointname zusammen.
+
+Wichtig: Wenn Destination "in Group" bzw wenn mehere DP im gleichen Verzeichnis "in current state tree" braucht jeder Datenpunkt seinen eindeutigen Namen. wenn default-Destination "in Group" wird der Datenpunktname automatisch mit der ID des States ergänzt (. durch _ ersetzt). Hier kann aber Auch z.B. Wohnzimmer_Licht.Power und Wohnzimmer_Licht.Energy angegeben werden.
+
+
+
 
 Beispiel mit valuetrackerovertime:
 <img src="MeinBeispiel2.jpg" />
