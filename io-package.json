@@ -1,9 +1,12 @@
 {
   "common": {
     "name": "virtualpowermeter",
-    "version": "1.3.1",
+    "version": "1.3.2",
     "connectionType": "local",
     "news": {
+      "1.3.2": {
+        "en": "group total is now its own counter, improved precision"
+      },
       "1.3.1": {
         "en": "reduce initializations and optimize group handling"
       },

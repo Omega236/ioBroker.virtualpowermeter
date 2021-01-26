@@ -6,8 +6,10 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core')
+const { captureRejectionSymbol } = require('events')
 // Time Modules
 const cron = require('node-cron') // Cron Schedulervar
+const { allowedNodeEnvironmentFlags } = require('process')
 
 const ObjectSettings = require('./ObjectSettings.js')
 class Virtualpowermeter extends utils.Adapter {
@@ -19,7 +21,7 @@ class Virtualpowermeter extends utils.Adapter {
       ...options,
       name: 'virtualpowermeter'
     })
-
+    this._GroupPrecisionEnergys = {}
     this._dicDatas = {}
     this._doingInitial = false
     this.on('ready', this.onReady.bind(this))
@@ -42,7 +44,7 @@ class Virtualpowermeter extends utils.Adapter {
     await this._initialObjects()
     this.subscribeForeignObjects('*')
     // repeat evey minute the calculation of the totalEnergy
-    cron.schedule('* * * * *', async() => {
+    cron.schedule('* * * * *', async () => {
       if (!this._doingInitial) {
         this.log.debug('cron started')
         for (let oneOD in this._dicDatas) {
@@ -78,7 +80,6 @@ class Virtualpowermeter extends utils.Adapter {
       if (oS && oS !== undefined) {
         await this._setPower(oS)
         await this._setGroupPower(oS.group)
-        await this._setGroupEnergy(oS.group)
       }
     }
   }
@@ -227,25 +228,36 @@ class Virtualpowermeter extends utils.Adapter {
     await this.setForeignStateAsync(oS.idPower, { val: oS.currentPowerRounded, ack: true })
   }
 
+  async _AddEnergyToDatapoint(idEnergy, currentPrecisionEnergy, currentPower,  ) {
+    let oldEnergy = 0
+    let oldts = new Date().getTime()
+    // EnergyTotal auslesen, timestamp und aktueller wert wird benötigt
+    let objidEnergy = await this.getForeignStateAsync(idEnergy)
+    if (objidEnergy) {
+      if (objidEnergy.val == await this._round(currentPrecisionEnergy)) {
+        oldEnergy = currentPrecisionEnergy
+      } else {
+        oldEnergy = Number(objidEnergy.val)
+      }
+      oldts = objidEnergy.ts
+    }
+    // berechnen wieviel wh dazukommen 
+    let newts = new Date().getTime()
+
+    let toAddEnergyTotal = currentPower * (newts - oldts) / 3600000
+    let newPrecisionEnergy = oldEnergy + toAddEnergyTotal
+    // neuen wert setzen
+    this.log.debug(`set ${idEnergy} value ${await this._round(newPrecisionEnergy)} (added:${await this._round(toAddEnergyTotal)})`)
+    await this.setForeignStateAsync(idEnergy, { val: await this._round(newPrecisionEnergy), ts:newts, ack: true })
+    return newPrecisionEnergy
+
+  }
   /**
   * calc the Total Energy size the last Change and add it
   * @param {ObjectSettings} oS
   */
   async _setEnergy(oS) {
-    let oldEnergy = 0
-    let oldts = new Date().getTime()
-    // EnergyTotal auslesen, timestamp und aktueller wert wird benötigt
-    let objidEnergy = await this.getForeignStateAsync(oS.idEnergy)
-    if (objidEnergy) {
-      oldEnergy = Number(objidEnergy.val)
-      oldts = objidEnergy.ts
-    }
-    // berechnen wieviel wh dazukommen (alles auf 2 nachkomma runden)
-    let toAddEnergyTotal = oS.currentPower * (new Date().getTime() - oldts) / 3600000
-    oS.currentEnergy = oldEnergy + toAddEnergyTotal
-    // neuen wert setzen
-    this.log.debug(`set ${oS.idEnergy} value ${oS.currentEnergyRounded} (added:${await this._round(toAddEnergyTotal)})`)
-    await this.setForeignStateAsync(oS.idEnergy, { val: oS.currentEnergyRounded, ack: true })
+    oS.currentEnergy = await this._AddEnergyToDatapoint(oS.idEnergy, oS.currentEnergy, oS.currentPower)
   }
 
   async _round(val) {
@@ -380,7 +392,6 @@ class Virtualpowermeter extends utils.Adapter {
   async _reInitAllGroups() {
     for (let group of await this._getGroupNames(true)) {
       await this._setGroupPower(group)
-      await this._setGroupEnergy(group)
       await this._setGroupInfo(group)
     }
   }
@@ -402,24 +413,12 @@ class Virtualpowermeter extends utils.Adapter {
   * @param {string} group
   */
   async _setGroupEnergy(group) {
-    if (!this._doingInitial) {
-      let gesamt = 0
-      for (let id of await this._getGroupMembers(group)) {
-        gesamt += this._dicDatas[id].currentEnergy
-      }
-      gesamt = await this._round(gesamt)
-      if (this.config.groupEnergieMustBeGreater) {
-        let oldState = await this.getStateAsync(await this._getgroupEnergyid(group))
-        if (oldState && oldState.val) {
-          if (gesamt < oldState.val) {
-            this.log.warn(`group ${group}: old value '${oldState.val}' is greater than new value '${gesamt}' -> no action`)
-            return
-          }
-        }
-      }
-      this.log.debug(`set ${await this._getgroupEnergyid(group)} value : ${gesamt}`)
-      await this.setStateAsync(await this._getgroupEnergyid(group), { val: gesamt, ack: true })
+    let currentPowerState = await this.getForeignStateAsync(await this._getgroupPowerid(group))
+    let currentPower = 0
+    if (currentPowerState && currentPowerState.val && !Number.isNaN(currentPowerState.val)) {
+      currentPower = Number(currentPowerState.val)
     }
+    this._GroupPrecisionEnergys[group] = await this._AddEnergyToDatapoint(await this._getgroupEnergyid(group), this._GroupPrecisionEnergys[group], currentPower)
   }
 
   /**
@@ -428,6 +427,8 @@ class Virtualpowermeter extends utils.Adapter {
   */
   async _setGroupPower(group) {
     if (!this._doingInitial) {
+      await this._setGroupEnergy(group)
+
       let sum = 0
       for (let id of await this._getGroupMembers(group)) {
         sum += this._dicDatas[id].currentPower
