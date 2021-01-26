@@ -7,16 +7,13 @@ class ObjectSettings {
   constructor(iobrokerObject, namespace, defaultPowerName, defaultEnergyName) {
     this.id = iobrokerObject._id
     this.iobrokerObject = iobrokerObject
-    this.group = iobrokerObject.common.custom[namespace].group
-    this.inverted = iobrokerObject.common.custom[namespace].inverted
-    this.maxpower = iobrokerObject.common.custom[namespace].maxpower
-    this.multi = 1
-    // @ts-ignore
-    if (iobrokerObject.common.max) { this.multi = this.multi / iobrokerObject.common.max }
+    let mycustom = iobrokerObject.common.custom[namespace]
+    this.group = mycustom.group
     this.idGroup = namespace + '.group_' + this.group + '.'
-    this.idGroupPower = this.idGroup + 'Virtual_Energy_Power_group_' + this.group
-    this.idGroupInfo = this.idGroup + 'info'
-    this.idGroupEnergy = this.idGroup + 'Virtual_Energy_Total_group_' + this.group
+    this.inverted = mycustom.inverted
+    this.maxpower = mycustom.maxpower
+    this.multi = 1
+    if (iobrokerObject.common.max) { this.multi = this.multi / iobrokerObject.common.max }
     this.currentPower = 0
     this.currentEnergy = 0
 
@@ -27,11 +24,18 @@ class ObjectSettings {
     // if starts with . means Create under current
     // only . means ur.id.defaultEnergy_Power
 
-    this.DPDestination = iobrokerObject.common.custom[namespace].DPDestination
+    this.DPDestination = mycustom.DPDestination
 
-    this.idPower = this.GenerateIDFromRelative(iobrokerObject.common.custom[namespace].idEnergyPower, idParent, defaultPowerName)
+    this.idPower = this.GenerateIDFromRelative(mycustom.idEnergyPower, idParent, defaultPowerName)
 
-    this.idEnergy = this.GenerateIDFromRelative(iobrokerObject.common.custom[namespace].idEnergyTotal, idParent, defaultEnergyName)
+    this.idEnergy = this.GenerateIDFromRelative(mycustom.idEnergyTotal, idParent, defaultEnergyName)
+  }
+
+  get currentPowerRounded() {
+    return this._round(this.currentPower)
+  }
+  get currentEnergyRounded() {
+    return this._round(this.currentEnergy)
   }
 
   /**
@@ -51,6 +55,10 @@ class ObjectSettings {
     } else if (this.DPDestination === 'anywhere') {
     }
     return relativeID
+  }
+
+  _round(val) {
+    return Math.round(val * 100) / 100
   }
 }
 module.exports = ObjectSettings
