@@ -229,6 +229,7 @@ class Virtualpowermeter extends utils.Adapter {
   async _AddEnergyToDatapoint(idEnergy, currentPrecisionEnergy, currentPower) {
     let oldEnergy = 0
     let oldts = new Date().getTime()
+    let lastChanged = new Date().getTime()
     // EnergyTotal auslesen, timestamp und aktueller wert wird benötigt
     let objidEnergy = await this.getForeignStateAsync(idEnergy)
     if (objidEnergy) {
@@ -237,6 +238,7 @@ class Virtualpowermeter extends utils.Adapter {
       } else {
         oldEnergy = Number(objidEnergy.val)
       }
+      lastChanged = objidEnergy.lc
       oldts = objidEnergy.ts
     }
     // berechnen wieviel wh dazukommen
@@ -246,7 +248,9 @@ class Virtualpowermeter extends utils.Adapter {
     let newPrecisionEnergy = oldEnergy + toAddEnergyTotal
     // neuen wert setzen
     this.log.debug(`set ${idEnergy} value ${await this._round(newPrecisionEnergy)} (added:${await this._round(toAddEnergyTotal)})`)
-    let lastChanged = (toAddEnergyTotal === 0) ? oldts : newts
+    if (toAddEnergyTotal !== 0) {
+      lastChanged = newts
+    }
     await this.setForeignStateAsync(idEnergy, { val: await this._round(newPrecisionEnergy), ts: newts, ack: true, lc: lastChanged })
     return newPrecisionEnergy
   }
