@@ -246,7 +246,8 @@ class Virtualpowermeter extends utils.Adapter {
     let newPrecisionEnergy = oldEnergy + toAddEnergyTotal
     // neuen wert setzen
     this.log.debug(`set ${idEnergy} value ${await this._round(newPrecisionEnergy)} (added:${await this._round(toAddEnergyTotal)})`)
-    await this.setForeignStateAsync(idEnergy, { val: await this._round(newPrecisionEnergy), ts: newts, ack: true })
+    let lastChanged = (toAddEnergyTotal === 0) ? oldts : newts
+    await this.setForeignStateAsync(idEnergy, { val: await this._round(newPrecisionEnergy), ts: newts, ack: true, lc: lastChanged })
     return newPrecisionEnergy
   }
   /**
