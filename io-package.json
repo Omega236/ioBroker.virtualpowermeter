@@ -50,14 +50,14 @@
         "de": "Text adapted"
       }
     },
-    "title": "Virtual Powermeter",
+    "title": "VirtualPowermeter",
     "titleLang": {
-      "en": "Virtual Powermeter",
-      "de": "Virtuelles Powermeter"
+      "en": "VirtualPowermeter",
+      "de": "VirtualPowermeter"
     },
     "desc": {
-      "en": "Generates virtual electricity meters",
-      "de": "Erzeugt Virtuelle Stromzähler"
+      "en": "Generates virtual electricity meters, e.g. for lights or other devices with fixed watt consumption ",
+      "de": "Erzeugt Virtuelle Stromzähler, für z.B. Lichter oder andere Geräte mit festen Watt-Verbrauch"
     },
     "authors": [
       "Lutz Sebastian <general.of.omega@googlemail.com>"
@@ -95,7 +95,6 @@
   "native": {
     "defaultPowerName": "Virtual_Energy_Power",
     "defaultEnergyName": "Virtual_Energy_Total",
-    "groupEnergieMustBeGreater": false,
     "defaultDPDestination": "inState"
   },
   "objects": [],

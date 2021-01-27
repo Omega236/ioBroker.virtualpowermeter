@@ -33,7 +33,6 @@ Die neuen Datenpunkte (besonders die Gruppen) könnten super mit valuetrackerove
 
 hier kan der Default-Name für das Power und Energy_Total definiert werden.
 
-Die Checkbox "Der berechnete Verbrauch der gesamten Gruppe muss größer sein als sein als der alte Wert" bewirkt dass wenn ein GruppenErgenis kleiner als der State ist, nur eine Warnung ausgegeben wird. Dies ist Sinnvoll, da man so sofort erkennt dass etwas schiefläuft (z.B. von einem State den Total DP-Name verändert und dadurch fängt dieser bei 0 an). Falls man wirklich will dass der Zähler bei der kleineren Zahl weiter macht, muss in Objecte für diesen State einmal manuell dieser kleinere Wert eingetragen werden (oder checkbox deaktiveren).
 
 Die Einstellung default setting: Datapoint Destination bestimmt die default Einstellung beim erstellen eines neuen Custom-Settings. Bei "in the state folder" wird bei neuen Custom-Settings die Standardnamen für Power und Energie genutz. Bei "in group" wird als Standardname die ObjectID des Custom-DP (. durch _ ersetzt) als Unterverzeichnis + der Standardname für Power und Energie genutz. "anywhere else" nutzt ebenfalls den Standardname für Power und Engery muss aber für jeden Custom-DP manuell angepasst werden.
 
@@ -45,6 +44,12 @@ Der Speicherort setzt sich aus dem Datapoint Destination + Datapointname zusamme
 
 Wichtig: Wenn Destination "in Group" bzw wenn mehere DP im gleichen Verzeichnis "in current state tree" braucht jeder Datenpunkt seinen eindeutigen Namen. wenn default-Destination "in Group" wird der Datenpunktname automatisch mit der ID des States ergänzt (. durch _ ersetzt). Hier kann aber Auch z.B. Wohnzimmer_Licht.Power und Wohnzimmer_Licht.Energy angegeben werden.
 
+## Custom Settings für Geräte die nur Power Angabe (Watt) und man die Wh zählen will
+
+Es gibt Geräte die nur eine Watt ausgabe haben und man aber wissen will wieviel Strom verbraucht wurde.
+Hierfür kann auch der VirtualPowermeter verwendet werden. Dafür muss nur der Max-Wert vom Datenpunkt und der Max-Power vom VirtualPowermeter gleich sein.
+Beispiel:
+<img src="BeispielPowerToEnergy.png">
 
 
 
@@ -53,6 +58,11 @@ Beispiel mit valuetrackerovertime:
 
 
 ## Changelog
+### 1.3.2 (2021-01-27)
+* (Omega236) group total is now its own counter
+* (Omega236) improved precision
+### 1.3.1 (2021-01-25)
+* (Omega236) reduce initializations and optimize group handling
 ### 1.3.0 (2021-01-15)
 * (scrounger) default ids for power and energie configurable through adapter settings
 * (scrounger) custom: autocomplete for group input added

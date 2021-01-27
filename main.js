@@ -6,10 +6,8 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core')
-const { captureRejectionSymbol } = require('events')
 // Time Modules
 const cron = require('node-cron') // Cron Schedulervar
-const { allowedNodeEnvironmentFlags } = require('process')
 
 const ObjectSettings = require('./ObjectSettings.js')
 class Virtualpowermeter extends utils.Adapter {
@@ -44,7 +42,7 @@ class Virtualpowermeter extends utils.Adapter {
     await this._initialObjects()
     this.subscribeForeignObjects('*')
     // repeat evey minute the calculation of the totalEnergy
-    cron.schedule('* * * * *', async () => {
+    cron.schedule('* * * * *', async() => {
       if (!this._doingInitial) {
         this.log.debug('cron started')
         for (let oneOD in this._dicDatas) {
@@ -228,7 +226,7 @@ class Virtualpowermeter extends utils.Adapter {
     await this.setForeignStateAsync(oS.idPower, { val: oS.currentPowerRounded, ack: true })
   }
 
-  async _AddEnergyToDatapoint(idEnergy, currentPrecisionEnergy, currentPower,  ) {
+  async _AddEnergyToDatapoint(idEnergy, currentPrecisionEnergy, currentPower) {
     let oldEnergy = 0
     let oldts = new Date().getTime()
     // EnergyTotal auslesen, timestamp und aktueller wert wird benötigt
@@ -241,16 +239,15 @@ class Virtualpowermeter extends utils.Adapter {
       }
       oldts = objidEnergy.ts
     }
-    // berechnen wieviel wh dazukommen 
+    // berechnen wieviel wh dazukommen
     let newts = new Date().getTime()
 
     let toAddEnergyTotal = currentPower * (newts - oldts) / 3600000
     let newPrecisionEnergy = oldEnergy + toAddEnergyTotal
     // neuen wert setzen
     this.log.debug(`set ${idEnergy} value ${await this._round(newPrecisionEnergy)} (added:${await this._round(toAddEnergyTotal)})`)
-    await this.setForeignStateAsync(idEnergy, { val: await this._round(newPrecisionEnergy), ts:newts, ack: true })
+    await this.setForeignStateAsync(idEnergy, { val: await this._round(newPrecisionEnergy), ts: newts, ack: true })
     return newPrecisionEnergy
-
   }
   /**
   * calc the Total Energy size the last Change and add it
