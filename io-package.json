@@ -1,9 +1,18 @@
 {
   "common": {
     "name": "virtualpowermeter",
-    "version": "1.2.2",
+    "version": "1.3.2",
     "connectionType": "local",
     "news": {
+      "1.3.2": {
+        "en": "group total is now its own counter, improved precision"
+      },
+      "1.3.1": {
+        "en": "reduce initializations and optimize group handling"
+      },
+      "1.3.0": {
+        "en": "default ids for power and energie configurable through adapter settings, custom: autocomplete for group input added, option added -> group energy values can only increase, Check duplicate Destination DP, allows to Set Destination DP to VPM-Group (~)"
+      },
       "1.2.2": {
         "en": "Group Calculations only after InitialFinished",
         "de": "Group Calculations only after InitialFinished"
@@ -41,14 +50,14 @@
         "de": "Text adapted"
       }
     },
-    "title": "Virtual Powermeter",
+    "title": "VirtualPowermeter",
     "titleLang": {
-      "en": "Virtual Powermeter",
-      "de": "Virtuelles Powermeter"
+      "en": "VirtualPowermeter",
+      "de": "VirtualPowermeter"
     },
     "desc": {
-      "en": "Generates virtual electricity meters",
-      "de": "Erzeugt Virtuelle Stromzähler"
+      "en": "Generates virtual electricity meters, e.g. for lights or other devices with fixed watt consumption ",
+      "de": "Erzeugt Virtuelle Stromzähler, für z.B. Lichter oder andere Geräte mit festen Watt-Verbrauch"
     },
     "authors": [
       "Lutz Sebastian <general.of.omega@googlemail.com>"
@@ -86,7 +95,7 @@
   "native": {
     "defaultPowerName": "Virtual_Energy_Power",
     "defaultEnergyName": "Virtual_Energy_Total",
-    "groupEnergieMustBeGreater": false
+    "defaultDPDestination": "inState"
   },
   "objects": [],
   "instanceObjects": []
