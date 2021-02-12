@@ -32,11 +32,19 @@
         
     </div>
     <div class="input-field col s4">
-      <input type="text" data-field="idEnergyPower" size="30">
-      <span class="translate">Datapointname for Datapoint Power</span>
-      <input type="text" data-field="idEnergyTotal" size="30">
-      <span class="translate">Datapointname for Energy</span>
-      <br />
+      <p>
+        <input type="text" data-field="idEnergyPower" size="30">
+        <span class="translate">Datapointname for Datapoint Power</span>
+        <input type="text" data-field="idEnergyTotal" size="30">
+        <span class="translate">Datapointname for Energy</span>
+      </p>
+
+      <br/>
+      <br/>
+      <p>
+        <input type="text" data-field="idOptionalSwitch">
+        <span class="translate">Optional: Additional Switch <br/>Full id or id in the same tree<br/>(needed if a Dimmer only switch an additional state)</span>
+      </p>
     </div>
 
   </div>  
@@ -68,6 +76,7 @@
           group: "light",
           maxpower: 50,
           enabled: false,
+          idOptionalSwitch: "",
           DPDestination: instanceObj.native.defaultDPDestination
         };
       }

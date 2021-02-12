@@ -74,6 +74,18 @@ class Virtualpowermeter extends utils.Adapter {
   async onStateChange(id, state) {
     if (state && !this._doingInitial) {
       this.log.debug(id + ' state changed')
+
+      // Maybee idOptionalSwitch
+      for (let oneId in this._dicDatas) {
+        /**
+         * @type {ObjectSettings}
+         */
+        const oneoS = this._dicDatas[oneId]
+        if (oneoS.idOptionalSwitch && oneoS.idOptionalSwitch === id) {
+          await this._setPower(oneoS)
+          await this._setGroupPower(oneoS.group)
+        }
+      }
       let oS = this._dicDatas[id]
       if (oS && oS !== undefined) {
         await this._setPower(oS)
@@ -191,6 +203,12 @@ class Virtualpowermeter extends utils.Adapter {
             this.log.debug('subscribeForeignStates ' + oS.id)
             this._dicDatas[oS.id] = oS
             await this.subscribeForeignStatesAsync(oS.id)
+            if (oS.idOptionalSwitch) {
+              if (await this.getForeignObjectAsync(oS.idOptionalSwitch) == null){
+                this.log.error(`Additional Switch (${oS.idOptionalSwitch}) from id ${oS.id} not exists (Powermeter working)`)
+              }
+              await this.subscribeForeignStatesAsync(oS.idOptionalSwitch)
+            }
             await this._setPower(oS)
             this.log.info(`initial done ${iobrokerObject._id} Destination Power: ${oS.idPower} Destination EnergyTotal: ${oS.idEnergy} Destination Group:  ${await this._getgroupid(oS.group)}`)
             initialized = true
@@ -212,6 +230,18 @@ class Virtualpowermeter extends utils.Adapter {
     await this._setEnergy(oS)
 
     let newPower = 0
+    if (oS.idOptionalSwitch) {
+      let idOptionalSwitchState = await this.getForeignStateAsync(oS.idOptionalSwitch)
+      if (idOptionalSwitchState) {
+        if (idOptionalSwitchState.val === false || idOptionalSwitchState.val === 0) {
+          oS.currentPower = 0
+          this.log.debug(`set ${oS.id} value  ${oS.currentPowerRounded} (Optional Switch Off)`)
+          await this.setForeignStateAsync(oS.idPower, { val: oS.currentPowerRounded, ack: true })
+          return
+        }
+      }
+    }
+
     // Den State auslesen (z.B. true/false oder 0%,20%,100%)
     let objState = await this.getForeignStateAsync(oS.id)
     if (objState) {

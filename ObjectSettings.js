@@ -29,6 +29,14 @@ class ObjectSettings {
     this.idPower = this.GenerateIDFromRelative(mycustom.idEnergyPower, idParent, defaultPowerName)
 
     this.idEnergy = this.GenerateIDFromRelative(mycustom.idEnergyTotal, idParent, defaultEnergyName)
+
+    this.idOptionalSwitch = null
+    if (mycustom.idOptionalSwitch && mycustom.idOptionalSwitch !== undefined && mycustom.idOptionalSwitch !== '') {
+      this.idOptionalSwitch = String(mycustom.idOptionalSwitch)
+      if (this.idOptionalSwitch.indexOf('.') < 0) {
+        this.idOptionalSwitch = idParent + this.idOptionalSwitch
+      }
+    }
   }
 
   get currentPowerRounded() {
