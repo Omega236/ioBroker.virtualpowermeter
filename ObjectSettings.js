@@ -13,7 +13,11 @@ class ObjectSettings {
     this.inverted = mycustom.inverted
     this.maxpower = mycustom.maxpower
     this.multi = 1
-    if (iobrokerObject.common.max) { this.multi = this.multi / iobrokerObject.common.max }
+    if (iobrokerObject.common.max) { 
+      this.multi = this.multi / iobrokerObject.common.max 
+    } else if (iobrokerObject.common.unit === '%') {
+      this.multi = this.multi / 100 
+    }
     this.currentPower = 0
     this.currentEnergy = 0
 
