@@ -58,6 +58,8 @@ Beispiel mit valuetrackerovertime:
 
 
 ## Changelog
+### 1.4.0 (2021-02-12)
+* (Omega236) adding OptionalSwitch for Dimmer with On/Off State
 ### 1.3.2 (2021-01-27)
 * (Omega236) group total is now its own counter
 * (Omega236) improved precision
