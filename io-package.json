@@ -1,9 +1,21 @@
 {
   "common": {
     "name": "virtualpowermeter",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "connectionType": "local",
     "news": {
+      "1.4.2": {
+        "en": "removing common.def from destination datapoints (resetting counters)",
+        "de": "Entfernen von common.def von Zieldatenpunkten (Zurücksetzen von Zählern)",
+        "ru": "удаление common.def из точек назначения (сброс счетчиков)",
+        "pt": "removendo common.def dos pontos de dados de destino (redefinindo contadores)",
+        "nl": "common.def verwijderen van de datapunten van de bestemming (tellers resetten)",
+        "fr": "suppression de common.def des points de données de destination (réinitialisation des compteurs)",
+        "it": "rimozione di common.def dai datapoint di destinazione (reimpostazione dei contatori)",
+        "es": "eliminar common.def de los puntos de datos de destino (restablecer contadores)",
+        "pl": "usuwanie common.def z docelowych punktów danych (resetowanie liczników)",
+        "zh-cn": "从目标数据点删除common.def（重置计数器）"
+      },
       "1.4.1": {
         "en": "on unit '%' interpret common.max as 100 if common.max not set"
       },
