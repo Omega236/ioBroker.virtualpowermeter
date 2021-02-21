@@ -19,6 +19,7 @@ class Virtualpowermeter extends utils.Adapter {
       ...options,
       name: 'virtualpowermeter'
     })
+    this.crons = []
     this._GroupPrecisionEnergys = {}
     this._dicDatas = {}
     this._doingInitial = false
@@ -42,7 +43,7 @@ class Virtualpowermeter extends utils.Adapter {
     await this._initialObjects()
     this.subscribeForeignObjects('*')
     // repeat evey minute the calculation of the totalEnergy
-    cron.schedule('* * * * *', async() => {
+    this.crons.push(cron.schedule('* * * * *', async() => {
       if (!this._doingInitial) {
         this.log.debug('cron started')
         for (let oneOD in this._dicDatas) {
@@ -52,7 +53,7 @@ class Virtualpowermeter extends utils.Adapter {
           await this._setGroupEnergy(group)
         }
       }
-    })
+    }))
   }
 
   /**
@@ -204,7 +205,7 @@ class Virtualpowermeter extends utils.Adapter {
             this._dicDatas[oS.id] = oS
             await this.subscribeForeignStatesAsync(oS.id)
             if (oS.idOptionalSwitch) {
-              if (await this.getForeignObjectAsync(oS.idOptionalSwitch) == null){
+              if (await this.getForeignObjectAsync(oS.idOptionalSwitch) == null) {
                 this.log.error(`Additional Switch (${oS.idOptionalSwitch}) from id ${oS.id} not exists (Powermeter working)`)
               }
               await this.subscribeForeignStatesAsync(oS.idOptionalSwitch)
@@ -381,10 +382,17 @@ class Virtualpowermeter extends utils.Adapter {
     if (!oldObject) {
       this.log.info(`create ${id}`)
       await this.setForeignObjectAsync(id, obj)
-    } else if (oldObject.common.desc !== obj.common.desc) {
-      this.log.info(`update desc for ${id} (old:'${oldObject.common.desc}' new: '${obj.common.desc}')`)
-      oldObject.common.desc = obj.common.desc
-      await this.setForeignObjectAsync(id, oldObject)
+    } else {
+      if (oldObject.common.desc !== obj.common.desc) {
+        this.log.info(`update desc for ${id} (old:'${oldObject.common.desc}' new: '${obj.common.desc}')`)
+        oldObject.common.desc = obj.common.desc
+        await this.setForeignObjectAsync(id, oldObject)
+      }
+      if ('def' in oldObject.common) {
+        this.log.info(`remove default-value for ${id} `)
+        delete oldObject.common.def
+        await this.setForeignObjectAsync(id, oldObject)
+      }
     }
   }
 
@@ -493,6 +501,10 @@ class Virtualpowermeter extends utils.Adapter {
       this.log.info('cleaned everything up...')
       await this.unsubscribeForeignStatesAsync('*')
       await this.unsubscribeForeignObjectsAsync('*')
+      for (const croni in this.crons) {
+        const onecron = this.crons[croni]
+        onecron.destroy()
+      }
       callback()
     } catch (e) {
       callback()
