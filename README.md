@@ -61,7 +61,7 @@ Beispiel mit valuetrackerovertime:
 	### __WORK IN PROGRESS__
 -->
 ## Changelog
-### __WORK IN PROGRESS__
+### 1.4.3 (2021-05-27)
 * (bluefox) added support for admin5
 
 ### 1.4.1 (2021-02-13)
