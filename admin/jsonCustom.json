@@ -1,0 +1,133 @@
+{
+    "i18n": {
+        "Maximum consumption in watts when device is switched on or at 100%": {
+            "en": "Maximum consumption in watts when device is switched on or at 100%",
+            "de": "Maximaler Verbrauch in Watt bei eingeschaltetem Gerät oder bei 100%",
+            "ru": "Максимальное потребление в ваттах при включении устройства или при 100%",
+            "pt": "Consumo máximo em watts quando o dispositivo está ligado ou a 100%",
+            "nl": "Maximaal verbruik in watt wanneer het apparaat is ingeschakeld of op 100%",
+            "fr": "Consommation maximale en watts lorsque l'appareil est allumé ou à 100%",
+            "it": "Consumo massimo in watt all'accensione del dispositivo o al 100%",
+            "es": "Consumo máximo en vatios cuando el dispositivo está encendido o al 100%",
+            "pl": "Maksymalne zużycie w watach przy włączonym urządzeniu lub przy 100%",
+            "zh-cn": "设备开机或100％时的最大功耗（瓦）"
+        },
+        "Group name (calculated consumption of the whole group)": {
+            "en": "Group name (calculated consumption of the whole group)",
+            "de": "Gruppenname (berechneter Verbrauch der gesamten Gruppe)",
+            "ru": "Название группы (расчетное потребление всей группы)",
+            "pt": "Nome do grupo (consumo calculado de todo o grupo)",
+            "nl": "Groepsnaam (berekend verbruik van de hele groep)",
+            "fr": "Nom du groupe (consommation calculée de l'ensemble du groupe)",
+            "it": "Nome del gruppo (consumo calcolato dell'intero gruppo)",
+            "es": "Nombre del grupo (consumo calculado de todo el grupo)",
+            "pl": "Nazwa grupy (obliczone zużycie dla całej grupy)",
+            "zh-cn": "组名（整个组的计算消耗量）"
+        },
+        "Datapoint name for Power": {
+            "en": "Datapoint name for Power",
+            "de": "Datenpunktname für Power",
+            "ru": "Datapoint name для власти",
+            "pt": "Datapoint name for Power",
+            "nl": "Datapuntnaam voor Power",
+            "fr": "Nom du point de données pour l'alimentation",
+            "it": "Datapoint name for Power",
+            "es": "Nombre del punto de datos para Power",
+            "pl": "Nazwa punktu danych dla mocy",
+            "zh-cn": "电源的数据点名称"
+        },
+        "Datapoint name for Energy": {
+            "en": "Datapoint name for Energy",
+            "de": "Datenpunktname für Energie",
+            "ru": "Datapoint name для энергии",
+            "pt": "Datapoint name for Energy",
+            "nl": "Datapuntnaam voor energie",
+            "fr": "Nom de point de données pour l'énergie",
+            "it": "Datapoint name for Energy",
+            "es": "Nombre de punto de datos para energía",
+            "pl": "Nazwa punktu danych dla energii",
+            "zh-cn": "能源的数据点名称"
+        },
+        "inverted": {
+            "en": "inverted",
+            "de": "invertiert",
+            "ru": "перевернутый",
+            "pt": "invertido",
+            "nl": "omgekeerd",
+            "fr": "inversé",
+            "it": "rovesciato",
+            "es": "invertido",
+            "pl": "odwrotny",
+            "zh-cn": "倒"
+        },
+        "use inverted value. if datapoint is 'SwitchedOff' you can inverted so it Calculates the Power on false and not on true": {
+            "en": "use inverted value. if datapoint is 'SwitchedOff' you can inverted so it Calculates the Power on false and not on true",
+            "de": "Invertierten Wert verwenden. Wenn der Datenpunkt 'Abgeschalten' ist, können Sie ihn invertieren, um die Leistung bei falsch und nicht bei wahr zu berechnen",
+            "ru": "используйте инвертированное значение. если datapoint имеет значение «SwitchedOff», вы можете инвертировать его, поэтому он рассчитывает мощность на ложь, а не на истину",
+            "pt": "use valor invertido. se o ponto de dados for 'SwitchedOff', você poderá invertê-lo, calculando a potência em falso e não em verdadeiro",
+            "nl": "gebruik omgekeerde waarde. als datapunt 'SwitchedOff' is, kun je het omkeren zodat het de power on false berekent en niet true",
+            "fr": "utilisez une valeur inversée. si le point de données est «SwitchedOff», vous pouvez l'inverser pour qu'il calcule la puissance sur faux et non sur vrai",
+            "it": "usa il valore invertito. se datapoint è 'SwitchedOff' è possibile invertire in modo che calcoli la potenza su false e non su true",
+            "es": "utilizar valor invertido si el punto de datos está 'apagado', puede invertirlo para que calcule la potencia en falso y no en verdadero",
+            "pl": "użyj odwróconej wartości. jeśli datapoint ma wartość „SwitchedOff”, możesz go odwrócić, aby obliczał Moc na false, a nie na true",
+            "zh-cn": "使用倒数。如果datapoint是'SwitchedOff'，则可以将其取反，从而计算false而不是true的功率"
+        }
+    },
+    "type": "panel",
+    "items": {
+        "inverted": {
+            "type": "checkbox",
+            "label": "inverted",
+            "help": "use inverted value. if datapoint is 'SwitchedOff' you can inverted so it Calculates the Power on false and not on true",
+            "sm": 12,
+            "default": false
+        },
+        "maxpower": {
+            "newLine": true,
+            "type": "number",
+            "label": "Maximum consumption in watts when device is switched on or at 100%",
+            "sm": 6,
+            "default": 50
+        },
+        "group": {
+            "type": "autocompleteSendTo",
+            "command": "groups",
+            "label": "Group name (calculated consumption of the whole group)",
+            "sm": 6,
+            "default": "light"
+        },
+        "DPDestination": {
+            "newLine": true,
+            "type": "select",
+            "label": "Datapoint Destination",
+            "options": [
+                {"value": "inGroup", "label": "in Group tree"},
+                {"value": "inState", "label": "in current state tree"},
+                {"value": "anywhere", "label": "anywhere else"}
+            ],
+            "defaultFunc": "instanceObj.native.defaultDPDestination",
+            "sm": 6
+        },
+        "idEnergyPower": {
+            "newLine": true,
+            "type": "text",
+            "label": "Datapoint name for Datapoint Power",
+            "sm": 6,
+            "defaultFunc": "instanceObj.native.defaultDPDestination === 'inGroup' ? (customObj._id || '').split('.').join('_') + '.' + (instanceObj.native.defaultPowerName || '') : ''"
+        },
+        "idEnergyTotal": {
+            "type": "text",
+            "label": "Datapoint name for Energy",
+            "default": false,
+            "sm": 6,
+            "defaultFunc": "instanceObj.native.defaultDPDestination === 'inGroup' ? (customObj._id || '').split('.').join('_') + '.' + (instanceObj.native.defaultEnergyName || '') : ''"
+        },
+        "idOptionalSwitch": {
+            "newLine": true,
+            "type": "text",
+            "label": "Additional Switch",
+            "help": "Optional: Full ID or ID in the same tree. (needed if a Dimmer only switch an additional state)",
+            "sm": 6
+        }
+    }
+}

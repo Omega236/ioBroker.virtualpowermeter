@@ -1,0 +1,70 @@
+{
+    "i18n": {
+        "Custom Dialog power default name": {
+            "en": "Custom Dialog power default name",
+            "de": "Leistung: Standardname für den benutzerdefinierten Dialog",
+            "ru": "Имя по умолчанию для настраиваемого диалогового окна",
+            "pt": "Nome padrão de energia da caixa de diálogo personalizada",
+            "nl": "Custom Dialog power standaard naam",
+            "fr": "Nom par défaut de l'alimentation de la boîte de dialogue personnalisée",
+            "it": "Nome predefinito di alimentazione della finestra di dialogo personalizzata",
+            "es": "Nombre predeterminado de energía del cuadro de diálogo personalizado",
+            "pl": "Domyślna nazwa zasilania okna dialogowego użytkownika",
+            "zh-cn": "自定义对话框电源默认名称"
+        },
+        "Custom Dialog energy default name": {
+            "en": "Custom Dialog energy default name",
+            "de": "Energie: Standardname für den benutzerdefinierten Dialog",
+            "ru": "Пользовательское имя диалога по умолчанию",
+            "pt": "Nome padrão de energia da caixa de diálogo personalizada",
+            "nl": "Custom Dialog Energy standaardnaam",
+            "fr": "Nom par défaut de l'énergie de la boîte de dialogue personnalisée",
+            "it": "Nome predefinito energia finestra di dialogo personalizzata",
+            "es": "Nombre predeterminado de energía del cuadro de diálogo personalizado",
+            "pl": "Domyślna nazwa energii w oknie dialogowym niestandardowego",
+            "zh-cn": "自定义对话框能量默认名称"
+        }
+    },
+    "type": "panel",
+    "items": {
+        "_help": {
+            "type": "staticText",
+            "text": "The adapter is configured via the data points of the energy consumers (for example light.level)",
+            "style": {
+                "fontSize": 16
+            }
+        },
+        "_image": {
+            "newLine": true,
+            "type": "staticImage",
+            "src": "adapter/virtualpowermeter/DatapointSample.PNG"
+        },
+        "defaultPowerName": {
+            "newLine": true,
+            "type": "text",
+            "label": "Custom Dialog power default name",
+            "sm": 12,
+            "md": 6
+        },
+        "defaultEnergyName": {
+            "newLine": true,
+            "type": "text",
+            "label": "Custom Dialog energy default name",
+            "sm": 12,
+            "md": 6
+        },
+        "defaultDPDestination": {
+            "newLine": true,
+            "type": "select",
+            "options": [
+                {"value": "inGroup", "label": "in Group tree"},
+                {"value": "inState", "label": "in current state tree"},
+                {"value": "anywhere", "label": "anywhere else"}
+            ],
+            "label": "Datapoint Destination",
+            "help": "Default setting",
+            "sm": 12,
+            "md": 6
+        }
+    }
+}
