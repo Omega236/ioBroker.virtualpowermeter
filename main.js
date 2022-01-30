@@ -264,7 +264,10 @@ class Virtualpowermeter extends utils.Adapter {
       if (oS.inverted) {
         theValueAbsolut = (theValueAbsolut - 1) * -1
       }
-      newPower = theValueAbsolut * oS.maxpower
+      if (oS.minpower == null){
+        oS.minpower = 0
+      }
+      newPower = (theValueAbsolut * (oS.maxpower - oS.minpower)) + oS.minpower
     }
     oS.currentPower = newPower
     this.log.debug(`set ${oS.id} value  ${oS.currentPowerRounded}`)

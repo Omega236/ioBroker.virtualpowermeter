@@ -1,9 +1,21 @@
 {
   "common": {
     "name": "virtualpowermeter",
-    "version": "1.4.4",
+    "version": "1.4.5",
     "connectionType": "local",
     "news": {
+      "1.4.5": {
+        "en": "add minimum/standby power usage",
+        "de": "Mindest-/Standby-Stromverbrauch hinzufügen",
+        "ru": "добавить минимальное / резервное энергопотребление",
+        "pt": "adicionar uso de energia mínimo/em espera",
+        "nl": "minimaal/stand-by stroomverbruik toevoegen",
+        "fr": "ajouter une consommation d'énergie minimale/en veille",
+        "it": "aggiungere il consumo energetico minimo/in standby",
+        "es": "añadir consumo de energía mínimo/en espera",
+        "pl": "dodaj minimalne/w trybie czuwania zużycie energii",
+        "zh-cn": "添加最小/待机功耗"
+      },
       "1.4.4": {
         "en": "bugfix wrong datapoint name",
         "de": "Bugfix falscher Datenpunktname",

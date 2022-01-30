@@ -12,6 +12,18 @@
       "pl": "Maksymalne zużycie w watach przy włączonym urządzeniu lub przy 100%",
       "zh-cn": "设备开机或100％时的最大功耗（瓦）"
     },
+    "Minimum/Standby consumption in watts when device is switched off or at 0%": {
+      "en": "Minimum/Standby consumption in watts when device is switched off or at 0%",
+      "de": "Mindest-/Standby-Verbrauch in Watt bei ausgeschaltetem Gerät oder bei 0 %",
+      "ru": "Минимальное/потребление в режиме ожидания в ваттах, когда устройство выключено или при 0%",
+      "pt": "Consumo mínimo/standby em watts quando o dispositivo está desligado ou em 0%",
+      "nl": "Minimum/Stand-by verbruik in watt bij uitgeschakeld apparaat of op 0%",
+      "fr": "Consommation minimale/en veille en watts lorsque l'appareil est éteint ou à 0 %",
+      "it": "Consumo minimo/standby in watt a dispositivo spento o allo 0%",
+      "es": "Consumo mínimo/en espera en vatios cuando el dispositivo está apagado o al 0 %",
+      "pl": "Zużycie minimalne/w trybie czuwania w watach, gdy urządzenie jest wyłączone lub na poziomie 0%",
+      "zh-cn": "设备关闭或 0% 时的最小/待机功耗（以瓦特为单位）"
+    },
     "Group name (calculated consumption of the whole group)": {
       "en": "Group name (calculated consumption of the whole group)",
       "de": "Gruppenname (berechneter Verbrauch der gesamten Gruppe)",
@@ -94,6 +106,13 @@
       "help": "Maximum consumption in watts when device is switched on or at 100%",
       "sm": 4,
       "default": 50
+    },
+    "minpower": {
+      "type": "number",
+      "label": "Min/Standby Power",
+      "help": "Minimum/Standby consumption in watts when device is switched off or at 0%",
+      "sm": 4,
+      "default": 0
     },
     "group": {
       "type": "autocompleteSendTo",

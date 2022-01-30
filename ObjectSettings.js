@@ -12,6 +12,7 @@ class ObjectSettings {
     this.idGroup = namespace + '.group_' + this.group + '.'
     this.inverted = mycustom.inverted
     this.maxpower = mycustom.maxpower
+    this.minpower = mycustom.minpower
     this.multi = 1
     if (iobrokerObject.common.max) { 
       this.multi = this.multi / iobrokerObject.common.max 
