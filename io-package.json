@@ -148,7 +148,8 @@
       {
         "admin": ">=3.0.0"
       }
-    ]
+    ],
+    "dataSource": "assumption"
   },
   "native": {
     "defaultPowerName": "Virtual_Energy_Power",
