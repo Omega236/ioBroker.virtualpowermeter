@@ -1,148 +1,160 @@
 {
-    "common": {
-        "name": "virtualpowermeter",
-        "version": "1.4.3",
-        "connectionType": "local",
-        "news": {
-            "1.4.3": {
-                "en": "added support for admin5",
-                "de": "Unterstützung für admin5 hinzugefügt",
-                "ru": "добавлена поддержка admin5",
-                "pt": "adicionado suporte para admin5",
-                "nl": "ondersteuning toegevoegd voor admin5",
-                "fr": "Ajout du support pour admin5",
-                "it": "aggiunto il supporto per admin5",
-                "es": "soporte agregado para admin5",
-                "pl": "dodane wsparcie dla admin5",
-                "zh-cn": "增加了对admin5的支持"
-            },
-            "1.4.2": {
-                "en": "removing common.def from destination datapoints (resetting counters)",
-                "de": "Entfernen von common.def von Zieldatenpunkten (Zurücksetzen von Zählern)",
-                "ru": "удаление common.def из точек назначения (сброс счетчиков)",
-                "pt": "removendo common.def dos pontos de dados de destino (redefinindo contadores)",
-                "nl": "common.def verwijderen van de datapunten van de bestemming (tellers resetten)",
-                "fr": "suppression de common.def des points de données de destination (réinitialisation des compteurs)",
-                "it": "rimozione di common.def dai datapoint di destinazione (reimpostazione dei contatori)",
-                "es": "eliminar common.def de los puntos de datos de destino (restablecer contadores)",
-                "pl": "usuwanie common.def z docelowych punktów danych (resetowanie liczników)",
-                "zh-cn": "从目标数据点删除common.def（重置计数器）"
-            },
-            "1.4.1": {
-                "en": "on unit '%' interpret common.max as 100 if common.max not set"
-            },
-            "1.4.0": {
-                "en": "adding OptionalSwitch for Dimmer with On/Off State"
-            },
-            "1.3.2": {
-                "en": "group total is now its own counter, improved precision"
-            },
-            "1.3.1": {
-                "en": "reduce initializations and optimize group handling"
-            },
-            "1.3.0": {
-                "en": "default ids for power and energie configurable through adapter settings, custom: autocomplete for group input added, option added -> group energy values can only increase, Check duplicate Destination DP, allows to Set Destination DP to VPM-Group (~)"
-            },
-            "1.2.2": {
-                "en": "Group Calculations only after InitialFinished",
-                "de": "Group Calculations only after InitialFinished"
-            },
-            "1.2.1": {
-                "en": "translation",
-                "de": "translation"
-            },
-            "1.2.0": {
-                "en": "js-controller 3.x support",
-                "de": "js-controller 3.x support"
-            },
-            "1.1.1": {
-                "en": "bugfix translation",
-                "de": "bugfix translation"
-            },
-            "1.1.0": {
-                "en": "Inverted added",
-                "de": "Inverted added"
-            },
-            "1.0.1": {
-                "en": "Security Updates",
-                "de": "Security Updates"
-            },
-            "1.0.0": {
-                "en": "Final Release",
-                "de": "Finale Version"
-            },
-            "0.2.8": {
-                "en": "Bug found on travis unsubscribeStatesAsync",
-                "de": "Bug found on travis unsubscribeStatesAsync"
-            },
-            "0.2.6": {
-                "en": "Text angepasst",
-                "de": "Text adapted"
-            }
-        },
-        "title": "VirtualPowermeter",
-        "titleLang": {
-            "en": "VirtualPowermeter",
-            "de": "VirtualPowermeter",
-            "ru": "Виртуальный измеритель мощности",
-            "pt": "Medidor de energia virtual",
-            "nl": "Virtuele vermogensmeter",
-            "fr": "Powermeter virtuel",
-            "it": "Powermeter virtuale",
-            "es": "Medidor de potencia virtual",
-            "pl": "Wirtualny miernik mocy",
-            "zh-cn": "虚拟功率计"
-        },
-        "desc": {
-            "en": "Generates virtual electricity meters, e.g. for lights or other devices with fixed watt consumption",
-            "de": "Erzeugt Virtuelle Stromzähler, für z.B. Lichter oder andere Geräte mit festen Watt-Verbrauch",
-            "ru": "Создает виртуальные счетчики электроэнергии, например для фонарей или других устройств с фиксированным потреблением ватт",
-            "pt": "Gera medidores virtuais de eletricidade, por ex. para luzes ou outros dispositivos com consumo de watt fixo",
-            "nl": "Genereert virtuele elektriciteitsmeters, b.v. voor lampen of andere apparaten met een vast wattage",
-            "fr": "Génère des compteurs d'électricité virtuels, par ex. pour les lumières ou autres appareils à consommation de watts fixe",
-            "it": "Genera contatori elettrici virtuali, ad es. per luci o altri dispositivi con consumo watt fisso",
-            "es": "Genera medidores de electricidad virtuales, p. Ej. para luces u otros dispositivos con consumo de vatios fijo",
-            "pl": "Generuje wirtualne liczniki energii elektrycznej, np. dla świateł lub innych urządzeń o stałym poborze mocy",
-            "zh-cn": "生成虚拟电表，例如用于固定功耗的灯或其他设备"
-        },
-        "authors": [
-            "Lutz Sebastian <general.of.omega@googlemail.com>"
-        ],
-        "keywords": [
-            "ioBroker",
-            "template",
-            "Smart Home",
-            "home automation"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "icon": "virtualpowermeter.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/Omega236/ioBroker.virtualpowermeter/master/admin/virtualpowermeter.png",
-        "readme": "https://github.com/Omega236/ioBroker.virtualpowermeter/blob/master/README.md",
-        "loglevel": "info",
-        "mode": "daemon",
-        "type": "energy",
-        "compact": true,
-        "messagebox": true,
-        "supportCustoms": true,
-        "materialize": true,
-        "preserveSettings": "custom",
-        "adminUI": {
-            "config": "json",
-            "custom": "json"
-        },
-        "dependencies": [
-            {
-                "admin": ">=3.0.0"
-            }
-        ]
+  "common": {
+    "name": "virtualpowermeter",
+    "version": "1.4.4",
+    "connectionType": "local",
+    "news": {
+      "1.4.4": {
+        "en": "bugfix wrong datapoint name",
+        "de": "Bugfix falscher Datenpunktname",
+        "ru": "исправлено неправильное имя точки данных",
+        "pt": "correção de bug nome de ponto de dados errado",
+        "nl": "bugfix verkeerde datapuntnaam",
+        "fr": "correction d'un bug sur le nom du point de données erroné",
+        "it": "bugfix nome punto dati errato",
+        "es": "corrección de errores nombre de punto de datos incorrecto",
+        "pl": "naprawa błędu zła nazwa punktu danych",
+        "zh-cn": "错误修正错误的数据点名称"
+      },
+      "1.4.3": {
+        "en": "added support for admin5",
+        "de": "Unterstützung für admin5 hinzugefügt",
+        "ru": "добавлена поддержка admin5",
+        "pt": "adicionado suporte para admin5",
+        "nl": "ondersteuning toegevoegd voor admin5",
+        "fr": "Ajout du support pour admin5",
+        "it": "aggiunto il supporto per admin5",
+        "es": "soporte agregado para admin5",
+        "pl": "dodane wsparcie dla admin5",
+        "zh-cn": "增加了对admin5的支持"
+      },
+      "1.4.2": {
+        "en": "removing common.def from destination datapoints (resetting counters)",
+        "de": "Entfernen von common.def von Zieldatenpunkten (Zurücksetzen von Zählern)",
+        "ru": "удаление common.def из точек назначения (сброс счетчиков)",
+        "pt": "removendo common.def dos pontos de dados de destino (redefinindo contadores)",
+        "nl": "common.def verwijderen van de datapunten van de bestemming (tellers resetten)",
+        "fr": "suppression de common.def des points de données de destination (réinitialisation des compteurs)",
+        "it": "rimozione di common.def dai datapoint di destinazione (reimpostazione dei contatori)",
+        "es": "eliminar common.def de los puntos de datos de destino (restablecer contadores)",
+        "pl": "usuwanie common.def z docelowych punktów danych (resetowanie liczników)",
+        "zh-cn": "从目标数据点删除common.def（重置计数器）"
+      },
+      "1.4.1": {
+        "en": "on unit '%' interpret common.max as 100 if common.max not set"
+      },
+      "1.4.0": {
+        "en": "adding OptionalSwitch for Dimmer with On/Off State"
+      },
+      "1.3.2": {
+        "en": "group total is now its own counter, improved precision"
+      },
+      "1.3.1": {
+        "en": "reduce initializations and optimize group handling"
+      },
+      "1.3.0": {
+        "en": "default ids for power and energie configurable through adapter settings, custom: autocomplete for group input added, option added -> group energy values can only increase, Check duplicate Destination DP, allows to Set Destination DP to VPM-Group (~)"
+      },
+      "1.2.2": {
+        "en": "Group Calculations only after InitialFinished",
+        "de": "Group Calculations only after InitialFinished"
+      },
+      "1.2.1": {
+        "en": "translation",
+        "de": "translation"
+      },
+      "1.2.0": {
+        "en": "js-controller 3.x support",
+        "de": "js-controller 3.x support"
+      },
+      "1.1.1": {
+        "en": "bugfix translation",
+        "de": "bugfix translation"
+      },
+      "1.1.0": {
+        "en": "Inverted added",
+        "de": "Inverted added"
+      },
+      "1.0.1": {
+        "en": "Security Updates",
+        "de": "Security Updates"
+      },
+      "1.0.0": {
+        "en": "Final Release",
+        "de": "Finale Version"
+      },
+      "0.2.8": {
+        "en": "Bug found on travis unsubscribeStatesAsync",
+        "de": "Bug found on travis unsubscribeStatesAsync"
+      },
+      "0.2.6": {
+        "en": "Text angepasst",
+        "de": "Text adapted"
+      }
     },
-    "native": {
-        "defaultPowerName": "Virtual_Energy_Power",
-        "defaultEnergyName": "Virtual_Energy_Total",
-        "defaultDPDestination": "inState"
+    "title": "VirtualPowermeter",
+    "titleLang": {
+      "en": "VirtualPowermeter",
+      "de": "VirtualPowermeter",
+      "ru": "Виртуальный измеритель мощности",
+      "pt": "Medidor de energia virtual",
+      "nl": "Virtuele vermogensmeter",
+      "fr": "Powermeter virtuel",
+      "it": "Powermeter virtuale",
+      "es": "Medidor de potencia virtual",
+      "pl": "Wirtualny miernik mocy",
+      "zh-cn": "虚拟功率计"
     },
-    "objects": [],
-    "instanceObjects": []
+    "desc": {
+      "en": "Generates virtual electricity meters, e.g. for lights or other devices with fixed watt consumption",
+      "de": "Erzeugt Virtuelle Stromzähler, für z.B. Lichter oder andere Geräte mit festen Watt-Verbrauch",
+      "ru": "Создает виртуальные счетчики электроэнергии, например для фонарей или других устройств с фиксированным потреблением ватт",
+      "pt": "Gera medidores virtuais de eletricidade, por ex. para luzes ou outros dispositivos com consumo de watt fixo",
+      "nl": "Genereert virtuele elektriciteitsmeters, b.v. voor lampen of andere apparaten met een vast wattage",
+      "fr": "Génère des compteurs d'électricité virtuels, par ex. pour les lumières ou autres appareils à consommation de watts fixe",
+      "it": "Genera contatori elettrici virtuali, ad es. per luci o altri dispositivi con consumo watt fisso",
+      "es": "Genera medidores de electricidad virtuales, p. Ej. para luces u otros dispositivos con consumo de vatios fijo",
+      "pl": "Generuje wirtualne liczniki energii elektrycznej, np. dla świateł lub innych urządzeń o stałym poborze mocy",
+      "zh-cn": "生成虚拟电表，例如用于固定功耗的灯或其他设备"
+    },
+    "authors": [
+      "Lutz Sebastian <general.of.omega@googlemail.com>"
+    ],
+    "keywords": [
+      "ioBroker",
+      "template",
+      "Smart Home",
+      "home automation"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "icon": "virtualpowermeter.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/Omega236/ioBroker.virtualpowermeter/master/admin/virtualpowermeter.png",
+    "readme": "https://github.com/Omega236/ioBroker.virtualpowermeter/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "energy",
+    "compact": true,
+    "messagebox": true,
+    "supportCustoms": true,
+    "materialize": true,
+    "preserveSettings": "custom",
+    "adminUI": {
+      "config": "json",
+      "custom": "json"
+    },
+    "dependencies": [
+      {
+        "admin": ">=3.0.0"
+      }
+    ]
+  },
+  "native": {
+    "defaultPowerName": "Virtual_Energy_Power",
+    "defaultEnergyName": "Virtual_Energy_Total",
+    "defaultDPDestination": "inState"
+  },
+  "objects": [],
+  "instanceObjects": []
 }

@@ -137,7 +137,7 @@
       "label": "Datapoint name for Energy",
       "default": false,
       "sm": 6,
-      "defaultFunc": "instanceObj.native.defaultDPDestination === 'inGroup' ? (customObj._id || '').split('.').join('_') + '.' + (instanceObj.native.defaultEnergyName || '') : instanceObj.native.defaultDPDestination === 'inState' ? (instanceObj.native.defaultPowerName || '') : ''"
+      "defaultFunc": "instanceObj.native.defaultDPDestination === 'inGroup' ? (customObj._id || '').split('.').join('_') + '.' + (instanceObj.native.defaultEnergyName || '') : instanceObj.native.defaultDPDestination === 'inState' ? (instanceObj.native.defaultEnergyName || '') : ''"
     },
     "idOptionalSwitch": {
       "newLine": true,
