@@ -44,7 +44,7 @@ class Virtualpowermeter extends utils.Adapter {
     await this._initialObjects()
     this.subscribeForeignObjects('*')
     // repeat evey minute the calculation of the totalEnergy
-    this.crons.push(cron.schedule('* * * * *', async() => {
+    this.crons.push(cron.schedule('* * * * *', async () => {
       if (!this._doingInitial) {
         this.log.debug('cron started')
         for (let oneOD in this._dicDatas) {
@@ -64,7 +64,7 @@ class Virtualpowermeter extends utils.Adapter {
       for (const group in existingGroups) {
         // iterate through all existing groups and extract group names
         let groupName = group.substring(group.lastIndexOf('_') + 1);
-        groups.push({value: groupName, label: groupName});
+        groups.push({ value: groupName, label: groupName });
       }
       this.sendTo(msg.from, msg.command, groups, msg.callback);
     }
@@ -243,13 +243,15 @@ class Virtualpowermeter extends utils.Adapter {
   async _setPower(oS) {
     // first recalc the current Energy because it use the timestam and the currentPower
     await this._setEnergy(oS)
-
-    let newPower = 0
+    if (oS.minpower == null) {
+      oS.minpower = 0
+    }
+    let newPower = oS.minpower
     if (oS.idOptionalSwitch) {
       let idOptionalSwitchState = await this.getForeignStateAsync(oS.idOptionalSwitch)
       if (idOptionalSwitchState) {
         if (idOptionalSwitchState.val === false || idOptionalSwitchState.val === 0) {
-          oS.currentPower = 0
+          oS.currentPower = newPower
           this.log.debug(`set ${oS.id} value  ${oS.currentPowerRounded} (Optional Switch Off)`)
           await this.setForeignStateAsync(oS.idPower, { val: oS.currentPowerRounded, ack: true })
           return
@@ -264,7 +266,8 @@ class Virtualpowermeter extends utils.Adapter {
       if (oS.inverted) {
         theValueAbsolut = (theValueAbsolut - 1) * -1
       }
-      newPower = theValueAbsolut * oS.maxpower
+
+      newPower = (theValueAbsolut * (oS.maxpower - oS.minpower)) + oS.minpower
     }
     oS.currentPower = newPower
     this.log.debug(`set ${oS.id} value  ${oS.currentPowerRounded}`)

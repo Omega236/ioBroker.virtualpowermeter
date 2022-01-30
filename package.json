@@ -1,6 +1,6 @@
 {
   "name": "iobroker.virtualpowermeter",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Generates virtual electricity meters",
   "author": {
     "name": "Lutz Sebastian",
