@@ -61,6 +61,9 @@ Beispiel mit valuetrackerovertime:
 	### __WORK IN PROGRESS__
 -->
 ## Changelog
+### 1.4.4 (2021-05-27)
+* (bluefox) bugfix wrong datapoint name
+
 ### 1.4.3 (2021-05-27)
 * (bluefox) added support for admin5
 
