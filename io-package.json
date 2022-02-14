@@ -1,9 +1,21 @@
 {
   "common": {
     "name": "virtualpowermeter",
-    "version": "1.4.5",
+    "version": "1.4.6",
     "connectionType": "local",
     "news": {
+      "1.4.6": {
+        "en": "update Dependencies",
+        "de": "Abhängigkeiten aktualisieren",
+        "ru": "обновить зависимости",
+        "pt": "atualizar dependências",
+        "nl": "update afhankelijkheden",
+        "fr": "mettre à jour les dépendances",
+        "it": "aggiornare le dipendenze",
+        "es": "actualizar dependencias",
+        "pl": "zaktualizuj zależności",
+        "zh-cn": "更新依赖"
+      },
       "1.4.5": {
         "en": "add minimum/standby power usage",
         "de": "Mindest-/Standby-Stromverbrauch hinzufügen",
@@ -158,7 +170,8 @@
     },
     "dependencies": [
       {
-        "admin": ">=3.0.0"
+        "admin": ">=3.0.0",
+        "js-controller": ">=2.0.0"
       }
     ],
     "dataSource": "assumption"
