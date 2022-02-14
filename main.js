@@ -5,11 +5,11 @@
  */
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
-const utils = require('@iobroker/adapter-core');
+const utils = require('@iobroker/adapter-core')
 // Time Modules
-const cron = require('node-cron'); // Cron Schedulervar
+const cron = require('node-cron') // Cron Schedulervar
 
-const ObjectSettings = require('./ObjectSettings.js');
+const ObjectSettings = require('./ObjectSettings.js')
 
 class Virtualpowermeter extends utils.Adapter {
   /**
@@ -27,7 +27,7 @@ class Virtualpowermeter extends utils.Adapter {
     this.on('ready', this.onReady.bind(this))
     this.on('objectChange', this.onObjectChange.bind(this))
     this.on('stateChange', this.onStateChange.bind(this))
-    this.on('message', this.onMessage.bind(this));
+    this.on('message', this.onMessage.bind(this))
     this.on('unload', this.onUnload.bind(this))
   }
 
@@ -44,7 +44,7 @@ class Virtualpowermeter extends utils.Adapter {
     await this._initialObjects()
     this.subscribeForeignObjects('*')
     // repeat evey minute the calculation of the totalEnergy
-    this.crons.push(cron.schedule('* * * * *', async () => {
+    this.crons.push(cron.schedule('* * * * *', async() => {
       if (!this._doingInitial) {
         this.log.debug('cron started')
         for (let oneOD in this._dicDatas) {
@@ -54,19 +54,19 @@ class Virtualpowermeter extends utils.Adapter {
           await this._setGroupEnergy(group)
         }
       }
-    }));
+    }))
   }
 
   async onMessage(msg) {
     if (msg.command === 'groups' && msg.callback) {
-      const groups = [];
-      const existingGroups = await this.getForeignObjectsAsync(`${this.namespace}.*.Virtual_Energy_Total_group_*`);
+      const groups = []
+      const existingGroups = await this.getForeignObjectsAsync(`${this.namespace}.*.Virtual_Energy_Total_group_*`)
       for (const group in existingGroups) {
         // iterate through all existing groups and extract group names
-        let groupName = group.substring(group.lastIndexOf('_') + 1);
-        groups.push({ value: groupName, label: groupName });
+        let groupName = group.substring(group.lastIndexOf('_') + 1)
+        groups.push({ value: groupName, label: groupName })
       }
-      this.sendTo(msg.from, msg.command, groups, msg.callback);
+      this.sendTo(msg.from, msg.command, groups, msg.callback)
     }
   }
 
