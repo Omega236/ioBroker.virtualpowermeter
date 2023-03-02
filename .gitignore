@@ -13,4 +13,3 @@ admin/i18n/flat.txt
 admin/i18n/*/flat.txt
 /.vscode
 *.code-workspace
-/package-lock.json
