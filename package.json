@@ -21,7 +21,7 @@
     "url": "https://github.com/Omega236/ioBroker.virtualpowermeter"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.6.7",
+    "@iobroker/adapter-core": "^2.6.8",
     "@types/node-cron": "^2.0.3",
     "cron": "^1.6.0",
     "node-cron": "^2.0.3",
