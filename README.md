@@ -140,7 +140,7 @@ Beispiel mit valuetrackerovertime:
 
 ### 0.0.1
 * (Omega236) initial release
-
+t
 ## License
 MIT License
 
