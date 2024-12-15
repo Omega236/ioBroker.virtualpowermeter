@@ -13,7 +13,8 @@ appveyor.yml
 .travis.yaml
 appveyor.yaml
 
-.eslintrc.json
+eslint.config.mjs
+prettier.config.mjs
 
 tsconfig.json
 admin/tsconfig.json
