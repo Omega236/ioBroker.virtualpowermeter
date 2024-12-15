@@ -33,6 +33,12 @@
             "style": {
                 "fontSize": 16
             }
+            ,
+            "xs": 12,
+            "lg": 12,
+            "xl": 12,
+            "sm": 12,
+            "md": 12
         },
         "_image": {
             "newLine": true,
@@ -44,14 +50,20 @@
             "type": "text",
             "label": "Custom Dialog power default name",
             "sm": 12,
-            "md": 6
+            "md": 6,
+            "xs": 12,
+            "lg": 6,
+            "xl": 6
         },
         "defaultEnergyName": {
             "newLine": true,
             "type": "text",
             "label": "Custom Dialog energy default name",
             "sm": 12,
-            "md": 6
+            "md": 6,
+            "xs": 12,
+            "lg": 6,
+            "xl": 6
         },
         "defaultDPDestination": {
             "newLine": true,
@@ -64,7 +76,10 @@
             "label": "Datapoint Destination",
             "help": "Default setting",
             "sm": 12,
-            "md": 6
+            "md": 6,
+            "xs": 12,
+            "lg": 6,
+            "xl": 6
         }
     }
 }
