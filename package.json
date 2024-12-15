@@ -36,6 +36,7 @@
     "@alcalzone/release-script-plugin-license": "^3.7.0",
     "@alcalzone/release-script-plugin-manual-review": "^3.7.0",
     "@iobroker/adapter-dev": "^1.3.0",
+    "@iobroker/eslint-config": "^1.0.0",
     "@iobroker/testing": "^4.1.3",
     "@types/chai": "^4.3.11",
     "@types/chai-as-promised": "^7.1.8",
@@ -48,7 +49,6 @@
     "axios": "^1.7.9",
     "chai": "^4.4.1",
     "chai-as-promised": "^7.1.1",
-    "eslint": "^8.57.0",
     "gulp": "^4.0.2",
     "mocha": "^11.0.1",
     "proxyquire": "^2.1.3",
@@ -64,7 +64,7 @@
     "test:integration": "mocha test/integration --exit",
     "test": "npm run test:js && npm run test:package",
     "check": "tsc --noEmit -p tsconfig.check.json",
-    "lint": "eslint",
+    "lint": "eslint -c eslint.config.mjs .",
     "release": "release-script"
   },
   "bugs": {
