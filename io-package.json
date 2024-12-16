@@ -113,7 +113,10 @@
       "energy",
       "home automation"
     ],
-    "licenseInformation": "MIT",
+    "licenseInformation": {
+      "type": "free",
+      "license": "MIT"
+    },
     "platform": "Javascript/Node.js",
     "icon": "virtualpowermeter.png",
     "enabled": true,

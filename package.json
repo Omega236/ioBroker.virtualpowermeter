@@ -13,12 +13,7 @@
     "Scrounger"
   ],
   "homepage": "https://github.com/Omega236/ioBroker.virtualpowermeter",
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/Omega236/ioBroker.virtualpowermeter/blob/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "keywords": [
     "energy",
     "Smart Home",
