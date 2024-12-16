@@ -3,6 +3,7 @@
     "name": "virtualpowermeter",
     "version": "1.5.0",
     "connectionType": "local",
+    "tier": 3,
     "news": {
       "1.5.0": {
         "en": "update Dependencies",
@@ -79,61 +80,8 @@
       "1.4.1": {
         "en": "on unit '%' interpret common.max as 100 if common.max not set",
         "de": "Wenn Einheit '%' nutze common.max als 100 wenn nicht gesetzt"
-      },
-      "1.4.0": {
-        "en": "adding OptionalSwitch for Dimmer with On/Off State",
-        "de": "Zusätzlicher Schalter f+r Dimmer mit On/Off State"
-      },
-      "1.3.2": {
-        "en": "group total is now its own counter, improved precision",
-        "de": "Gruppenzähler zählt nun selber hoch"
-      },
-      "1.3.1": {
-        "en": "reduce initializations and optimize group handling",
-        "de": "optimierung der Initialisierung"
-      },
-      "1.3.0": {
-        "en": "default ids for power and energie configurable through adapter settings, custom: autocomplete for group input added, option added -> group energy values can only increase, Check duplicate Destination DP, allows to Set Destination DP to VPM-Group (~)",
-        "de": "Configuration umgebaut"
-      },
-      "1.2.2": {
-        "en": "Group Calculations only after InitialFinished",
-        "de": "Group Calculations only after InitialFinished"
-      },
-      "1.2.1": {
-        "en": "translation",
-        "de": "translation"
-      },
-      "1.2.0": {
-        "en": "js-controller 3.x support",
-        "de": "js-controller 3.x support"
-      },
-      "1.1.1": {
-        "en": "bugfix translation",
-        "de": "bugfix translation"
-      },
-      "1.1.0": {
-        "en": "Inverted added",
-        "de": "Inverted added"
-      },
-      "1.0.1": {
-        "en": "Security Updates",
-        "de": "Security Updates"
-      },
-      "1.0.0": {
-        "en": "Final Release",
-        "de": "Finale Version"
-      },
-      "0.2.8": {
-        "en": "Bug found on travis unsubscribeStatesAsync",
-        "de": "Bug found on travis unsubscribeStatesAsync"
-      },
-      "0.2.6": {
-        "en": "Text angepasst",
-        "de": "Text adapted"
       }
     },
-    "title": "VirtualPowermeter",
     "titleLang": {
       "en": "VirtualPowermeter",
       "de": "VirtualPowermeter",
@@ -162,12 +110,10 @@
       "Lutz Sebastian <general.of.omega@googlemail.com>"
     ],
     "keywords": [
-      "ioBroker",
       "energy",
-      "Smart Home",
       "home automation"
     ],
-    "license": "MIT",
+    "licenseInformation": "MIT",
     "platform": "Javascript/Node.js",
     "icon": "virtualpowermeter.png",
     "enabled": true,
@@ -179,7 +125,6 @@
     "compact": true,
     "messagebox": true,
     "supportCustoms": true,
-    "materialize": true,
     "preserveSettings": "custom",
     "adminUI": {
       "config": "json",
