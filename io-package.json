@@ -92,7 +92,8 @@
       "it": "Powermeter virtuale",
       "es": "Medidor de potencia virtual",
       "pl": "Wirtualny miernik mocy",
-      "zh-cn": "虚拟功率计"
+      "zh-cn": "虚拟功率计",
+      "uk": "VirtualPowermeter"
     },
     "desc": {
       "en": "Generates virtual electricity meters, e.g. for lights or other devices with fixed watt consumption",
@@ -104,7 +105,8 @@
       "it": "Genera contatori elettrici virtuali, ad es. per luci o altri dispositivi con consumo watt fisso",
       "es": "Genera medidores de electricidad virtuales, p. Ej. para luces u otros dispositivos con consumo de vatios fijo",
       "pl": "Generuje wirtualne liczniki energii elektrycznej, np. dla świateł lub innych urządzeń o stałym poborze mocy",
-      "zh-cn": "生成虚拟电表，例如用于固定功耗的灯或其他设备"
+      "zh-cn": "生成虚拟电表，例如用于固定功耗的灯或其他设备",
+      "uk": "Generates virtual electricity meters, e.g. for lights or other devices with fixed watt consumption"
     },
     "authors": [
       "Lutz Sebastian <general.of.omega@googlemail.com>"
@@ -140,7 +142,7 @@
     ],
     "globalDependencies": [
       {
-        "admin": ">=6.13.16"
+        "admin": ">=7.4.10"
       }
     ],
     "dataSource": "assumption"
