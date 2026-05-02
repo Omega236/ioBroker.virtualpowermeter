@@ -61,6 +61,9 @@ Beispiel mit valuetrackerovertime:
 -->
 ## Changelog
 
+### **WORK IN PROGRESS**
+- (copilot) Adapter requires node.js >= 22 now
+
 ### 1.5.0 (2024-12-16)
 * (Omega236) Update Dependencies
 

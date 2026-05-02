@@ -7,7 +7,7 @@
     "email": "general.of.omega@googlemail.com"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "contributors": [
     "Scrounger"
