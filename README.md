@@ -61,6 +61,10 @@ Beispiel mit valuetrackerovertime:
 -->
 ## Changelog
 
+
+### **WORK IN PROGRESS**
+- (ioBroker-Bot) Adapter requires js-controller >= 6.0.11 now.
+
 ### 1.5.0 (2024-12-16)
 * (Omega236) Update Dependencies
 
